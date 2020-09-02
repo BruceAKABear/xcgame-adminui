@@ -1,93 +1,54 @@
 <template>
-  <a-layout>
-    <a-layout-header class="header">
-      <div class="logo"/>
-      <a-menu
-        theme="dark"
-        mode="horizontal"
-        :default-selected-keys="['2']"
-        :style="{ lineHeight: '64px' }"
-      >
-        <a-menu-item key="1">
-          nav 1
-        </a-menu-item>
-        <a-menu-item key="2">
-          nav 2
-        </a-menu-item>
-        <a-menu-item key="3">
-          nav 3
-        </a-menu-item>
-      </a-menu>
-    </a-layout-header>
-    <a-layout>
-      <a-layout-sider width="200" style="background: #fff">
-        <a-menu
-          mode="inline"
-          :default-selected-keys="['1']"
-          :default-open-keys="['sub1']"
-          :style="{ height: '100%', borderRight: 0 }"
-        >
-          <a-sub-menu key="sub1">
-            <span slot="title"><a-icon type="user"/>subnav 1</span>
-            <a-menu-item key="1">
-              option1
-            </a-menu-item>
-            <a-menu-item key="2">
-              option2
-            </a-menu-item>
-            <a-menu-item key="3">
-              option3
-            </a-menu-item>
-            <a-menu-item key="4">
-              option4
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub2">
-            <span slot="title"><a-icon type="laptop"/>subnav 2</span>
-            <a-menu-item key="5">
-              option5
-            </a-menu-item>
-            <a-menu-item key="6">
-              option6
-            </a-menu-item>
-            <a-menu-item key="7">
-              option7
-            </a-menu-item>
-            <a-menu-item key="8">
-              option8
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub3">
-            <span slot="title"><a-icon type="notification"/>subnav 3</span>
-            <a-menu-item key="9">
-              option9
-            </a-menu-item>
-            <a-menu-item key="10">
-              option10
-            </a-menu-item>
-            <a-menu-item key="11">
-              option11
-            </a-menu-item>
-            <a-menu-item key="12">
-              option12
-            </a-menu-item>
-          </a-sub-menu>
-        </a-menu>
-      </a-layout-sider>
-      <a-layout style="padding: 0 24px 24px">
-        <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>Home</a-breadcrumb-item>
-          <a-breadcrumb-item>List</a-breadcrumb-item>
-          <a-breadcrumb-item>App</a-breadcrumb-item>
-        </a-breadcrumb>
-        <a-layout-content
-          :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
-        >
-          Content
-        </a-layout-content>
-      </a-layout>
-    </a-layout>
-  </a-layout>
+  <el-container>
+    <el-header>Header</el-header>
+    <el-container>
+      <el-aside width="200px">
+        <el-menu
+          default-active="2"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @close="handleClose"
+          background-color="#545c64"
+          text-color="#fff"
+          active-text-color="#ffd04b">
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>导航一</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title">分组一</template>
+              <el-menu-item index="1-1">选项1</el-menu-item>
+              <el-menu-item index="1-2">选项2</el-menu-item>
+            </el-menu-item-group>
+            <el-menu-item-group title="分组2">
+              <el-menu-item index="1-3">选项3</el-menu-item>
+            </el-menu-item-group>
+            <el-submenu index="1-4">
+              <template slot="title">选项4</template>
+              <el-menu-item index="1-4-1">选项1</el-menu-item>
+            </el-submenu>
+          </el-submenu>
+          <el-menu-item index="2">
+            <i class="el-icon-menu"></i>
+            <span slot="title">导航二</span>
+          </el-menu-item>
+          <el-menu-item index="3" disabled>
+            <i class="el-icon-document"></i>
+            <span slot="title">导航三</span>
+          </el-menu-item>
+          <el-menu-item index="4">
+            <i class="el-icon-setting"></i>
+            <span slot="title">导航四</span>
+          </el-menu-item>
+        </el-menu>
+      </el-aside>
+      <!--主-->
+      <el-main>
+        Main
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
@@ -97,7 +58,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content{
-  height: 100%;
+.el-main{
+  background-color: #eeeeee;
+
 }
 </style>
