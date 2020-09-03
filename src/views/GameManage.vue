@@ -56,12 +56,17 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="100">
+        width="150">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="warning"
             @click="handleEdit( scope.row)">修改
+          </el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDel( scope.row)">删除
           </el-button>
         </template>
       </el-table-column>
@@ -121,7 +126,7 @@
 </template>
 
 <script>
-import { page, addOrUpdate } from '@/api/Game'
+import { page, addOrUpdate, deleteById } from '@/api/Game'
 
 export default {
   name: 'GameManage',
@@ -233,6 +238,21 @@ export default {
       } else {
         this.updataDialogFormVisible = false
       }
+    },
+    handleDel (rowData) {
+      this.$confirm('游戏基本信息非常重要, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(rowData)
+        // 调用删除
+        deleteById({ id: rowData.id }).then(res => {
+          this.$message.success('删除成功')
+          // 重新查询数据
+          this.doPageQuery()
+        })
+      })
     }
   },
   created () {

@@ -6,3 +6,5 @@ export const addOrUpdate = data => createAPI('/game/addOrUpdate', 'post', data)
 export const findById = data => createAPI('/game/findById', 'get', data)
 // 分页查询
 export const page = data => createAPI('/game/page', 'get', data)
+// 根据ID删除
+export const deleteById = data => createAPI('/game/deleteById', 'get', data)

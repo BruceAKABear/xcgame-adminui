@@ -5,7 +5,7 @@
       <el-header>Header</el-header>
       <!--菜单-->
       <el-menu
-        default-active="2"
+        :default-active="activePath"
         class="el-menu-vertical-demo"
         background-color="#001529"
         text-color="#fff"
@@ -13,27 +13,27 @@
         router
       >
 
-        <el-menu-item index="dashBoard">
+        <el-menu-item index="dashBoard" @click="savePath('dashBoard')">
           <i class="el-icon-menu"></i>
           <span slot="title">仪表台</span>
         </el-menu-item>
-        <el-menu-item index="appManage">
+        <el-menu-item index="appManage" @click="savePath('appManage')">
           <i class="el-icon-mobile"></i>
           <span slot="title">应用管理</span>
         </el-menu-item>
-        <el-menu-item index="gameManage">
+        <el-menu-item index="gameManage" @click="savePath('gameManage')">
           <i class="el-icon-menu"></i>
           <span slot="title">游戏管理</span>
         </el-menu-item>
-        <el-menu-item index="contentManage">
+        <el-menu-item index="contentManage" @click="savePath('contentManage')">
           <i class="el-icon-document-copy"></i>
           <span slot="title">内容管理</span>
         </el-menu-item>
-        <el-menu-item index="dataManage">
+        <el-menu-item index="dataManage" @click="savePath('dataManage')">
           <i class="el-icon-data-line"></i>
           <span slot="title">数据管理</span>
         </el-menu-item>
-        <el-menu-item index="systemManage">
+        <el-menu-item index="systemManage" @click="savePath('systemManage')">
           <i class="el-icon-setting"></i>
           <span slot="title">系统设置</span>
         </el-menu-item>
@@ -56,7 +56,22 @@
 
 <script>
 export default {
-  name: 'Layout'
+  name: 'Layout',
+  data () {
+    return {
+      activePath: 'dashBoard'
+    }
+  },
+  methods: {
+    savePath (pathName) {
+      this.activePath = pathName
+      // 存session
+      window.sessionStorage.setItem('activePath', pathName)
+    }
+  },
+  created () {
+    this.activePath = window.sessionStorage.getItem('activePath')
+  }
 }
 </script>
 
@@ -80,7 +95,7 @@ export default {
       background-color: white;
     }
 
-    .el-card{
+    .el-card {
       height: 99%;
     }
   }
