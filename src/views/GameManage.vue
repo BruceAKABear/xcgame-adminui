@@ -20,8 +20,18 @@
         width="180">
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
+        prop="appId"
+        label="APPID">
+      </el-table-column>
+      <el-table-column
+        :show-overflow-tooltip="true"
+        prop="appSecret"
+        label="APPSecret">
+      </el-table-column>
+      <el-table-column
         prop="gameName"
-        label="游戏名称"
+        label="游戏名"
         width="150">
       </el-table-column>
       <el-table-column
@@ -51,13 +61,13 @@
           <el-button
             size="mini"
             type="warning"
-            @click="handleEdit(scope.$index, scope.row)">修改
+            @click="handleEdit( scope.row)">修改
           </el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--新增弹框-->
-    <el-dialog title="新增游戏" :visible.sync="dialogFormVisible">
+    <el-dialog title="新增游戏" :visible.sync="dialogFormVisible" @close="unShowAndClear(1,'addGameForm')">
       <!--form表单-->
       <el-form label-position="right" label-width="120px" :model="gameFormData" :rules="rules" ref="addGameForm">
         <el-form-item label="游戏名称" prop="gameName">
@@ -66,16 +76,45 @@
         <el-form-item label="所属游戏公司" prop="gameCompany">
           <el-input v-model="gameFormData.gameCompany" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="支付回调URL" prop="payCallbackUrl">
-          <el-input v-model="gameFormData.payCallbackUrl" autocomplete="off"></el-input>
-        </el-form-item>
         <el-form-item label="游戏访问地址" prop="gameH5Url">
           <el-input v-model="gameFormData.gameH5Url" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="支付回调URL" prop="payCallbackUrl">
+          <el-input v-model="gameFormData.payCallbackUrl" autocomplete="off"></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="saveOrUpdateGame('addGameForm')">确 定</el-button>
+        <el-button @click="unShowAndClear(1,'addGameForm')">取 消</el-button>
+        <el-button type="primary" @click="saveGame('addGameForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!--修改弹框-->
+    <el-dialog title="新增游戏" :visible.sync="updataDialogFormVisible">
+      <!--form表单-->
+      <el-form label-position="right" label-width="120px" :model="updateGameFormData" :rules="rules"
+               ref="updateGameForm">
+        <el-form-item label="游戏名称" prop="gameName">
+          <el-input v-model="updateGameFormData.gameName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="APPID" prop="appId">
+          <el-input v-model="updateGameFormData.appId" autocomplete="off" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="APPSercet" prop="appSecret">
+          <el-input v-model="updateGameFormData.appSecret" autocomplete="off" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="所属游戏公司" prop="gameCompany">
+          <el-input v-model="updateGameFormData.gameCompany" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="游戏访问地址" prop="gameH5Url">
+          <el-input v-model="updateGameFormData.gameH5Url" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="支付回调URL" prop="payCallbackUrl">
+          <el-input v-model="updateGameFormData.payCallbackUrl" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="unShowAndClear(2,'updateGameForm')">取 消</el-button>
+        <el-button type="primary" @click="updateGame('updateGameForm')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -94,7 +133,9 @@ export default {
       },
       pageData: {},
       dialogFormVisible: false,
+      updataDialogFormVisible: false,
       gameFormData: {},
+      updateGameFormData: {},
       rules: {
         gameName: [
           {
@@ -134,7 +175,7 @@ export default {
         console.log(res.data)
       })
     },
-    saveOrUpdateGame (formName) {
+    saveGame (formName) {
       // addGameForm
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -153,6 +194,45 @@ export default {
           return false
         }
       })
+    },
+    updateGame (formName) {
+      this.$confirm('游戏信息必须保证正确, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            // 新增请求
+            addOrUpdate(this.updateGameFormData).then(res => {
+              this.$message.success('修改成功')
+              // 清空
+              this.$refs[formName].resetFields()
+              // 隐藏
+              this.updataDialogFormVisible = false
+              // 再次请求列表
+              this.doPageQuery()
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
+      })
+    },
+    handleEdit (row) {
+      this.updateGameFormData = row
+      this.updataDialogFormVisible = true
+      console.log(row)
+      console.log(this.updateGameFormData)
+    },
+    unShowAndClear (type, fromId) {
+      if (type === 1) {
+        this.dialogFormVisible = false
+        this.$refs[fromId].resetFields()
+      } else {
+        this.updataDialogFormVisible = false
+      }
     }
   },
   created () {
