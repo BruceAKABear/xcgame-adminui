@@ -8,6 +8,7 @@ import GameManage from '@/views/GameManage'
 import ContentManage from '@/views/ContentManage'
 import DataManage from '@/views/DataManage'
 import SystemManage from '@/views/SystemManage'
+import { getToken } from '@/utils/TokenUtil'
 
 Vue.use(VueRouter)
 
@@ -61,6 +62,22 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+// 路由守卫监控是否登录
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login') {
+    // 如果去登录页直接放行到登录页
+    next()
+  } else {
+    // 如果不是去登录页，则判断是否登录
+    if (getToken() == null) {
+      // 未登录,跳转到登录页
+      next('/login')
+    } else {
+      // 登录，放行
+      next()
+    }
+  }
 })
 
 export default router

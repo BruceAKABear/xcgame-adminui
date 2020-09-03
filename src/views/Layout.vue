@@ -2,12 +2,16 @@
   <el-container>
     <el-aside width="200px">
       <!--菜单头-->
-      <el-header>Header</el-header>
+      <el-header>
+        <div>
+          <span>熙辰游戏</span>
+        </div>
+      </el-header>
       <!--菜单-->
       <el-menu
         :default-active="activePath"
         class="el-menu-vertical-demo"
-        background-color="#001529"
+        background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b"
         router
@@ -83,7 +87,14 @@ export default {
     background-color: #545c64;
 
     .el-header {
-      background-color: white;
+      font-size: 22px;
+      font-weight: bold;
+      color: #FFFFFF;
+      background-color: #545c64;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: solid 1px #FFFFFF;
     }
   }
 

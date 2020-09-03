@@ -31,15 +31,22 @@ instance.interceptors.response.use(
     console.log('---------', response.data)
     const status = response.status
     const message = response.message
+    const code = response.code
 
     if (status) {
       return response.data
     } else {
-      Message({
-        message: message,
-        type: 'error',
-        duration: 3 * 1000
-      })
+      if (code === 10001) {
+        // 需要登录，直接跳到登录页
+
+      } else {
+        Message({
+          message: message,
+          type: 'error',
+          duration: 3 * 1000
+        })
+      }
+
       return Promise.reject(new Error('token expired'))
     }
     // // debugger

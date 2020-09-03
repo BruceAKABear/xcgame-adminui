@@ -129,7 +129,7 @@
     <el-dialog title="新增游戏" :visible.sync="updataDialogFormVisible">
       <!--form表单-->
       <el-form label-position="right" label-width="120px" :model="updateAppFormData" :rules="rules"
-               ref="updateGameForm">
+               ref="updateAppForm">
         <el-form-item label="应用名称" prop="appName">
           <el-input v-model="updateAppFormData.appName" autocomplete="off"></el-input>
         </el-form-item>
@@ -172,8 +172,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="unShowAndClear(2,'updateGameForm')">取 消</el-button>
-        <el-button type="primary" @click="updateGame('updateGameForm')">确 定</el-button>
+        <el-button @click="unShowAndClear(2,'updateAppForm')">取 消</el-button>
+        <el-button type="primary" @click="updateApp('updateAppForm')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -269,12 +269,26 @@ export default {
       })
     },
     conditionPage (type) {
-      this.pageParam.type = type
       this.doPageQuery()
     },
     saveApp (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          // 逻辑上去删除一下不必要的数据
+          const type = this.addAppFormData.type
+          const showType = this.addAppFormData.showType
+          if (type === 2) {
+            // 显示游戏，将所有的非游戏内容删除
+            this.addAppFormData.appId = ''
+            this.addAppFormData.appSecret = ''
+            this.addAppFormData.appOriId = ''
+          }
+          if (showType === 1 || showType === 2) {
+            this.addAppFormData.gameId = ''
+          } else {
+            this.contentId = ''
+          }
+
           // 新增请求
           addOrUpdate(this.addAppFormData).then(res => {
             this.$message.success('新增成功')
@@ -282,6 +296,40 @@ export default {
             this.$refs[formName].resetFields()
             // 隐藏
             this.addDialogFormVisible = false
+            // 再次请求列表
+            this.doPageQuery()
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    updateApp (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // 逻辑上去删除一下不必要的数据
+          const type = this.updateAppFormData.type
+          const showType = this.updateAppFormData.showType
+          if (type === 2) {
+            // 显示游戏，将所有的非游戏内容删除
+            this.updateAppFormData.appId = ''
+            this.updateAppFormData.appSecret = ''
+            this.updateAppFormData.appOriId = ''
+          }
+          if (showType === 1 || showType === 2) {
+            this.updateAppFormData.gameId = ''
+          } else {
+            this.contentId = ''
+          }
+
+          // 新增请求
+          addOrUpdate(this.updateAppFormData).then(res => {
+            this.$message.success('新增成功')
+            // 清空
+            this.$refs[formName].resetFields()
+            // 隐藏
+            this.updataDialogFormVisible = false
             // 再次请求列表
             this.doPageQuery()
           })
@@ -315,7 +363,6 @@ export default {
       })
     },
     handleEdit (row) {
-      console.log('应用修改数据', row)
       this.updateAppFormData = row
       this.updataDialogFormVisible = true
     },
