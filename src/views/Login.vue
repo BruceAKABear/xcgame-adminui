@@ -47,10 +47,7 @@ export default {
         }).then(res => {
           setToken(res.data)
           this.$message.success('登录成功')
-          setTimeout(function () {
-            // 跳转主页
-            this.$router.push('/admin')
-          }, 1000)
+          this.$router.push('/')
         })
       }
     }

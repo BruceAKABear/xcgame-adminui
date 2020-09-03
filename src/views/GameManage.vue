@@ -1,0 +1,172 @@
+<template>
+  <div>
+    <el-breadcrumb separator="/">
+      <el-breadcrumb-item>首页</el-breadcrumb-item>
+      <el-breadcrumb-item>游戏管理</el-breadcrumb-item>
+    </el-breadcrumb>
+    <div class="app-header">
+      <el-button size="small" type="primary" @click="dialogFormVisible=true">新增游戏</el-button>
+    </div>
+    <el-table
+      :data="pageData.records"
+      height="400"
+      border
+      style="width: 100%"
+      size="small"
+    >
+      <el-table-column
+        prop="id"
+        label="ID"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="gameName"
+        label="游戏名称"
+        width="150">
+      </el-table-column>
+      <el-table-column
+        prop="gameCompany"
+        label="游戏所属公司"
+        width="150">
+      </el-table-column>
+      <el-table-column
+        :show-overflow-tooltip="true"
+        prop="gameH5Url"
+        label="游戏H5访问地址">
+      </el-table-column>
+      <el-table-column
+        :show-overflow-tooltip="true"
+        prop="payCallbackUrl"
+        label="游戏支付回调URL">
+      </el-table-column>
+      <el-table-column
+        prop="createTime"
+        label="新增时间"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        width="100">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="warning"
+            @click="handleEdit(scope.$index, scope.row)">修改
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!--新增弹框-->
+    <el-dialog title="新增游戏" :visible.sync="dialogFormVisible">
+      <!--form表单-->
+      <el-form label-position="right" label-width="120px" :model="gameFormData" :rules="rules" ref="addGameForm">
+        <el-form-item label="游戏名称" prop="gameName">
+          <el-input v-model="gameFormData.gameName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="所属游戏公司" prop="gameCompany">
+          <el-input v-model="gameFormData.gameCompany" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="支付回调URL" prop="payCallbackUrl">
+          <el-input v-model="gameFormData.payCallbackUrl" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="游戏访问地址" prop="gameH5Url">
+          <el-input v-model="gameFormData.gameH5Url" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveOrUpdateGame('addGameForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { page, addOrUpdate } from '@/api/Game'
+
+export default {
+  name: 'GameManage',
+  data () {
+    return {
+      pageQueryParam: {
+        pageNumber: 1,
+        pageSize: 10
+      },
+      pageData: {},
+      dialogFormVisible: false,
+      gameFormData: {},
+      rules: {
+        gameName: [
+          {
+            required: true,
+            message: '请输入游戏名',
+            trigger: 'blur'
+          }
+        ],
+        gameCompany: [
+          {
+            required: true,
+            message: '请输入游戏公司名',
+            trigger: 'blur'
+          }
+        ],
+        gameH5Url: [
+          {
+            required: true,
+            message: '请输入游戏地址',
+            trigger: 'blur'
+          }
+        ],
+        payCallbackUrl: [
+          {
+            required: true,
+            message: '请输入游戏支付回调地址',
+            trigger: 'blur'
+          }
+        ]
+      }
+    }
+  },
+  methods: {
+    doPageQuery () {
+      page(this.pageQueryParam).then(res => {
+        this.pageData = res.data
+        console.log(res.data)
+      })
+    },
+    saveOrUpdateGame (formName) {
+      // addGameForm
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // 新增请求
+          addOrUpdate(this.gameFormData).then(res => {
+            this.$message.success('新增成功')
+            // 清空
+            this.$refs[formName].resetFields()
+            // 隐藏
+            this.dialogFormVisible = false
+            // 再次请求列表
+            this.doPageQuery()
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
+  },
+  created () {
+    this.doPageQuery()
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.app-header {
+  margin-top: 35px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+</style>

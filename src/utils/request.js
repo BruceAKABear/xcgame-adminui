@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-import store from '@/store'
 import { getToken } from '@/utils/TokenUtil'
 
 // create an axios instance
@@ -11,10 +10,11 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   config => {
+    config.headers.token = getToken()
     // Do something before request is sent
-    if (store.getters.token) {
-      config.headers.token = getToken()
-    }
+    // if (store.getters.token) {
+    //   config.headers.token = getToken()
+    // }
     return config
   },
   error => {
@@ -68,7 +68,7 @@ instance.interceptors.response.use(
     Message({
       message: error.message,
       type: 'error',
-      duration: 5 * 1000
+      duration: 3 * 1000
     })
     return Promise.reject(error)
   }

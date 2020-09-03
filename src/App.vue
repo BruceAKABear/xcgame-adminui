@@ -14,8 +14,6 @@ export default {
 </script>
 
 <style>
-html body{
-  margin: 0;
-}
+@import './assets/global.css';
 
 </style>
