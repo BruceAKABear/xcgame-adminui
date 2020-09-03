@@ -8,3 +8,5 @@ export const findById = data => createAPI('/game/findById', 'get', data)
 export const page = data => createAPI('/game/page', 'get', data)
 // 根据ID删除
 export const deleteById = data => createAPI('/game/deleteById', 'get', data)
+// 查询游戏集合供下拉
+export const queryGameList = data => createAPI('/game/queryGameList', 'get', data)

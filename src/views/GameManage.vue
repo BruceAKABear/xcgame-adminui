@@ -228,8 +228,6 @@ export default {
     handleEdit (row) {
       this.updateGameFormData = row
       this.updataDialogFormVisible = true
-      console.log(row)
-      console.log(this.updateGameFormData)
     },
     unShowAndClear (type, fromId) {
       if (type === 1) {
