@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item>首页</el-breadcrumb-item>
-      <el-breadcrumb-item>应用管理</el-breadcrumb-item>
+      <el-breadcrumb-item>客服管理</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="app-header">
       <el-button size="small" type="primary" @click="addDialogFormVisible=true">新增应用</el-button>

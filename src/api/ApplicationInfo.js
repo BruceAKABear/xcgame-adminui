@@ -8,3 +8,5 @@ export const findById = data => createAPI('/appInfo/findById', 'get', data)
 export const page = data => createAPI('/appInfo/page', 'get', data)
 // 根据ID删除
 export const deleteById = data => createAPI('/appInfo/deleteById', 'get', data)
+// 查询应用集合
+export const queryAppList = data => createAPI('/appInfo/queryAppList', 'get', data)

@@ -1,20 +1,27 @@
 <template>
   <el-container>
-    <el-aside width="200px">
+    <el-aside :width="collapse?'64px':'200px'">
       <!--菜单头-->
       <el-header>
-        <div>
+        <el-image
+          style="width: 50px; height: 40px"
+          :src="url"
+          fit="scale-down"></el-image>
+        <div style="margin-left: 10px" v-if="!collapse">
           <span>熙辰游戏</span>
         </div>
       </el-header>
       <!--菜单-->
       <el-menu
         :default-active="activePath"
-        class="el-menu-vertical-demo"
+        class="el-menu-vertical"
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b"
         router
+        :unique-opened="true"
+        :collapse="collapse"
+        :collapse-transition="false"
       >
 
         <el-menu-item index="dashBoard" @click="savePath('dashBoard')">
@@ -37,16 +44,39 @@
           <i class="el-icon-data-line"></i>
           <span slot="title">数据管理</span>
         </el-menu-item>
-        <el-menu-item index="systemManage" @click="savePath('systemManage')">
-          <i class="el-icon-setting"></i>
-          <span slot="title">系统设置</span>
+        <el-menu-item index="customerService" @click="savePath('customerService')">
+          <i class="el-icon-menu"></i>
+          <span slot="title">客服管理</span>
         </el-menu-item>
+        <el-submenu index="sysconfig">
+          <template slot="title">
+            <i class="el-icon-setting"></i>
+            <span>系统设置</span>
+          </template>
+          <el-menu-item index="systemManage" @click="savePath('systemManage')">
+            <i class="el-icon-user-solid"></i>
+            <span slot="title">人员管理</span>
+          </el-menu-item>
+        </el-submenu>
+
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header>
-        <div>
-          <i class="el-icon-s-fold"></i>
+      <el-header class="main-header-box">
+        <!--缩小-->
+        <i :class="collapse?'el-icon-s-unfold':'el-icon-s-fold'" style="font-size: 20px;cursor: pointer"
+           @click="collapse=!collapse"></i>
+        <div class="user-info-box">
+          <el-avatar size="medium"
+                     src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
+          <el-dropdown trigger="click" @command="doLogout">
+              <span class="el-dropdown-link">
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-school" command="logout">退出系统</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </el-header>
       <el-main>
@@ -63,7 +93,9 @@ export default {
   name: 'Layout',
   data () {
     return {
-      activePath: 'dashBoard'
+      activePath: 'dashBoard',
+      url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+      collapse: false
     }
   },
   methods: {
@@ -71,6 +103,12 @@ export default {
       this.activePath = pathName
       // 存session
       window.sessionStorage.setItem('activePath', pathName)
+    },
+    doLogout (command) {
+      // 清空session
+      window.sessionStorage.clear()
+      // 重定向到登录页
+      this.$router.push('/login')
     }
   },
   created () {
@@ -96,15 +134,35 @@ export default {
       align-items: center;
       border-bottom: solid 1px #FFFFFF;
     }
+
+    .el-menu-vertical {
+      border-right: 0;
+    }
+  }
+
+  .main-header-box {
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .user-info-box {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .el-dropdown {
+        margin-left: 5px;
+        margin-right: 10px;
+      }
+
+    }
   }
 
   .el-main {
     background-color: #eeeeee;
     padding: 10px;
-
-    .el-header {
-      background-color: white;
-    }
 
     .el-card {
       height: 99%;

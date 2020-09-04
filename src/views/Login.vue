@@ -10,7 +10,7 @@
         </div>
         <div class="login-input-box">
           <el-input size="large" v-model="phoneNumber" placeholder="手机号码" prefix-icon="el-icon-mobile"></el-input>
-          <el-input style="margin-top: 20px" ref="userNameInput" size="large" v-model="passWord"
+          <el-input style="margin-top: 20px" ref="userNameInput" size="large" v-model="passWord" type="password"
                     placeholder="密码" prefix-icon="el-icon-lock"></el-input>
           <el-button type="primary" @click="doLogin">
             立即登录
@@ -31,8 +31,8 @@ export default {
   data () {
     return {
       backgroundImage: '~@/assets/login-back.jpg',
-      phoneNumber: '',
-      passWord: ''
+      phoneNumber: '13157368595',
+      passWord: '123456'
     }
   },
   methods: {
@@ -47,6 +47,7 @@ export default {
         }).then(res => {
           setToken(res.data)
           this.$message.success('登录成功')
+          window.sessionStorage.setItem('activePath', 'dashBoard')
           this.$router.push('/')
         })
       }

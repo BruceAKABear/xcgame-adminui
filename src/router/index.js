@@ -9,6 +9,7 @@ import ContentManage from '@/views/ContentManage'
 import DataManage from '@/views/DataManage'
 import SystemManage from '@/views/SystemManage'
 import { getToken } from '@/utils/TokenUtil'
+import CustomerService from '@/views/CustomerService'
 
 Vue.use(VueRouter)
 
@@ -46,6 +47,11 @@ const routes = [
         path: '/dataManage',
         name: 'DataManage',
         component: DataManage
+      },
+      {
+        path: '/customerService',
+        name: 'CustomerService',
+        component: CustomerService
       },
       {
         path: '/systemManage',

@@ -1,10 +1,11 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import { getToken } from '@/utils/TokenUtil'
+import router from '@/router'
 
 // create an axios instance
 const instance = axios.create({
-  baseURL: 'http://127.0.0.1:8222',
+  baseURL: 'http://192.168.1.5:8222',
   timeout: 5000
 })
 // 请求拦截器
@@ -28,17 +29,18 @@ instance.interceptors.request.use(
 // respone interceptor
 instance.interceptors.response.use(
   response => {
-    console.log('---------', response.data)
-    const status = response.status
-    const message = response.message
-    const code = response.code
+    const realRes = response.data
+    console.log('响应拦截器：', realRes)
 
+    const status = realRes.status
+    const message = realRes.message
+    const code = realRes.code
     if (status) {
       return response.data
     } else {
-      if (code === 10001) {
-        // 需要登录，直接跳到登录页
-
+      if (code === 11111) {
+        // token失效需要重新登录
+        router.push('/login')
       } else {
         Message({
           message: message,
@@ -47,7 +49,7 @@ instance.interceptors.response.use(
         })
       }
 
-      return Promise.reject(new Error('token expired'))
+      return Promise.reject(new Error('业务不能被执行'))
     }
     // // debugger
     // // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;

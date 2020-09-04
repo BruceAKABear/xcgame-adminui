@@ -1,5 +1,5 @@
 <template>
-  <div>系统设置</div>
+  <div>人员管理</div>
 </template>
 
 <script>
