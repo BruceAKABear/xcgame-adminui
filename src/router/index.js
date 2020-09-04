@@ -10,6 +10,7 @@ import DataManage from '@/views/DataManage'
 import SystemManage from '@/views/SystemManage'
 import { getToken } from '@/utils/TokenUtil'
 import CustomerService from '@/views/CustomerService'
+import EmployeeManage from '@/views/EmployeeManage'
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,11 @@ const routes = [
         path: '/systemManage',
         name: 'SystemManage',
         component: SystemManage
+      },
+      {
+        path: '/employeeManage',
+        name: 'EmployeeManage',
+        component: EmployeeManage
       }
     ]
   }, {

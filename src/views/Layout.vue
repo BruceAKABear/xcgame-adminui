@@ -53,9 +53,9 @@
             <i class="el-icon-setting"></i>
             <span>系统设置</span>
           </template>
-          <el-menu-item index="systemManage" @click="savePath('systemManage')">
+          <el-menu-item index="employeeManage" @click="savePath('employeeManage')">
             <i class="el-icon-user-solid"></i>
-            <span slot="title">人员管理</span>
+            <span slot="title">员工管理</span>
           </el-menu-item>
         </el-submenu>
 
