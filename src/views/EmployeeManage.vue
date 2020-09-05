@@ -98,26 +98,26 @@
       <!--form表单-->
       <el-form label-position="right" label-width="120px" :model="updateEmployeeFormData" :rules="rules"
                ref="updateEmployeeForm">
-        <el-form-item label="用户昵称" prop="userName">
+        <el-form-item label="用户昵称">
           <el-input v-model="updateEmployeeFormData.userName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="手机号" prop="phoneNumber">
+        <el-form-item label="手机号">
           <el-input v-model="updateEmployeeFormData.phoneNumber" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="启停状态" prop="enable">
+        <el-form-item label="启停状态">
           <el-switch
             v-model="updateEmployeeFormData.enable"
             active-text="启用"
             inactive-text="停用">
           </el-switch>
         </el-form-item>
-        <el-form-item label="密码" prop="passWord">
+        <el-form-item label="密码">
           <el-input v-model="updateEmployeeFormData.passWord" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="unShowAndClear(2,'updateEmployeeForm')">取 消</el-button>
-        <el-button type="primary" @click="updateContent('updateEmployeeForm')">确 定</el-button>
+        <el-button type="primary" @click="updateEmployee('updateEmployeeForm')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -198,12 +198,33 @@ export default {
         }
       })
     },
+    updateEmployee (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // 新增请求
+          addOrUpdate(this.updateEmployeeFormData).then(res => {
+            this.$message.success('修改成功')
+            // 清空
+            this.$refs[formName].resetFields()
+            // 隐藏
+            this.updataDialogFormVisible = false
+            // 再次请求列表
+            this.doPageQuery()
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
     handleDel (rowData) {
-      deleteById({ id: rowData.id }).then(res => {
-        console.log(res)
-        this.$message.success('删除成功')
-        // 重新查询数据
-        this.doPageQuery()
+      this.$confirm('是否确认删除？').then(res => {
+        deleteById({ id: rowData.id }).then(res => {
+          console.log(res)
+          this.$message.success('删除成功')
+          // 重新查询数据
+          this.doPageQuery()
+        })
       })
     },
     handleEdit (row) {

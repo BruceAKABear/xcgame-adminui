@@ -37,7 +37,7 @@
       </el-table-column>
       <el-table-column
         label="内容类型"
-        width="100"
+        width="180"
         align="center"
       >
         <template slot-scope="scope">

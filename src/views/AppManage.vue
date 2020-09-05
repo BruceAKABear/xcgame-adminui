@@ -31,6 +31,7 @@
         width="180">
       </el-table-column>
       <el-table-column
+        align="center"
         label="应用类型">
         <template slot-scope="scope">
           <el-tag :type="scope.row.type === 1 ? 'success' : 'warning'">{{
@@ -40,6 +41,21 @@
         </template>
       </el-table-column>
       <el-table-column
+        align="center"
+        label="小程序APPID">
+        <template slot-scope="scope">
+          {{ scope.row.type === 1 ? scope.row.appId : '-' }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="小程序原始">
+        <template slot-scope="scope">
+          {{ scope.row.type === 1 ? scope.row.appOriId : '-' }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        align="center"
         label="显示类型">
         <template slot-scope="scope">
           <el-tag :type="scope.row.showType===1?'success':scope.row.showType===2?'warning':'danger'">
@@ -115,7 +131,7 @@
                        :key="content.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="关联游戏" prop="contentId" v-if="addAppFormData.showType==3">
+        <el-form-item label="关联游戏" prop="gameId" v-if="addAppFormData.showType==3">
           <el-select v-model="addAppFormData.gameId" placeholder="请选关联游戏">
             <el-option :label="game.gameName" :value="game.id" v-for="game in gameList" :key="game.id"></el-option>
           </el-select>

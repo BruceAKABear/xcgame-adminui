@@ -62,17 +62,17 @@
       <el-table-column label="当日用户" align="center">
         <el-table-column
           prop="id"
-          label="用户"
+          label="用户数"
         >
         </el-table-column>
         <el-table-column
           prop="id"
-          label="创角用户"
+          label="创角用户数"
         >
         </el-table-column>
         <el-table-column
           prop="id"
-          label="创角10级"
+          label="创角10级数"
         >
         </el-table-column>
       </el-table-column>
@@ -80,17 +80,17 @@
       <el-table-column label="总用户" align="center">
         <el-table-column
           prop="id"
-          label="用户"
+          label="用户数"
         >
         </el-table-column>
         <el-table-column
           prop="id"
-          label="创角用户"
+          label="创角用户数"
         >
         </el-table-column>
         <el-table-column
           prop="id"
-          label="创角10级"
+          label="创角10级数"
         >
         </el-table-column>
       </el-table-column>
@@ -175,7 +175,6 @@ export default {
       })
     },
     doPageQuery () {
-      console.log('--------------', this.pageParam)
       page(this.pageParam).then(res => {
         this.dataPageData = res.data
       })
