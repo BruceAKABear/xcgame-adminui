@@ -44,10 +44,33 @@
           <i class="el-icon-data-line"></i>
           <span slot="title">数据管理</span>
         </el-menu-item>
-        <el-menu-item index="customerService" @click="savePath('customerService')">
-          <i class="el-icon-menu"></i>
-          <span slot="title">客服管理</span>
+        <el-menu-item index="dataManage" @click="savePath('dataManage')">
+          <i class="el-icon-data-line"></i>
+          <span slot="title">订单管理</span>
         </el-menu-item>
+        <el-menu-item index="customerManage" @click="savePath('dataManage')">
+          <i class="el-icon-data-line"></i>
+          <span slot="title">用户管理</span>
+        </el-menu-item>
+        <!--        <el-menu-item index="customerService" @click="savePath('customerService')">-->
+        <!--          <i class="el-icon-menu"></i>-->
+        <!--          <span slot="title">客服管理</span>-->
+        <!--        </el-menu-item>-->
+        <el-submenu index="sysconfig">
+          <template slot="title">
+            <i class="el-icon-setting"></i>
+            <span>客服管理</span>
+          </template>
+          <el-menu-item index="employeeManage" @click="savePath('employeeManage')">
+            <i class="el-icon-user-solid"></i>
+            <span slot="title">客服模板</span>
+          </el-menu-item>
+          <el-menu-item index="employeeManage" @click="savePath('employeeManage')">
+            <i class="el-icon-user-solid"></i>
+            <span slot="title">客户反馈</span>
+          </el-menu-item>
+        </el-submenu>
+
         <el-submenu index="sysconfig">
           <template slot="title">
             <i class="el-icon-setting"></i>
