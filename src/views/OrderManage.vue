@@ -18,6 +18,7 @@
     </div>
     <!--表格-->
     <el-table
+      size="small"
       :data="orderPageData.records"
       height="500"
       border

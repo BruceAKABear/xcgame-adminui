@@ -10,6 +10,7 @@
     </div>
     <!--表格-->
     <el-table
+      size="small"
       :data="employeePageData.records"
       height="500"
       border

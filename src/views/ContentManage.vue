@@ -15,6 +15,7 @@
       </div>
     </div>
     <el-table
+      size="small"
       :data="contentPageData.records"
       height="500"
       border

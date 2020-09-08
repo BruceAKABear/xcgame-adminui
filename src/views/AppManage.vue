@@ -9,13 +9,14 @@
       <div>
         <el-radio-group v-model="pageParam.type" size="small" @change="conditionPage">
           <el-radio-button label="">全部</el-radio-button>
-          <el-radio-button label="1">资讯</el-radio-button>
-          <el-radio-button label="2">壁纸</el-radio-button>
-          <el-radio-button label="3">游戏</el-radio-button>
+          <el-radio-button label="1">资讯应用</el-radio-button>
+          <el-radio-button label="2">壁纸应用</el-radio-button>
+          <el-radio-button label="3">游戏应用</el-radio-button>
         </el-radio-group>
       </div>
     </div>
     <el-table
+      size="small"
       :data="appPageData.records"
       height="500"
       border
