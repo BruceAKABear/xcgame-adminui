@@ -11,6 +11,8 @@ import SystemManage from '@/views/SystemManage'
 import { getToken } from '@/utils/TokenUtil'
 import CustomerService from '@/views/CustomerService'
 import EmployeeManage from '@/views/EmployeeManage'
+import OrderManage from '@/views/OrderManage'
+import CustomerManage from '@/views/CustomerManage'
 
 Vue.use(VueRouter)
 
@@ -63,6 +65,16 @@ const routes = [
         path: '/employeeManage',
         name: 'EmployeeManage',
         component: EmployeeManage
+      },
+      {
+        path: '/orderManage',
+        name: 'OrderManage',
+        component: OrderManage
+      },
+      {
+        path: '/customerManage',
+        name: 'CustomerManage',
+        component: CustomerManage
       }
     ]
   }, {

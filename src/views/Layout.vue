@@ -44,33 +44,28 @@
           <i class="el-icon-data-line"></i>
           <span slot="title">数据管理</span>
         </el-menu-item>
-        <el-menu-item index="dataManage" @click="savePath('dataManage')">
-          <i class="el-icon-data-line"></i>
+        <el-menu-item index="orderManage" @click="savePath('orderManage')">
+          <i class="el-icon-document-copy"></i>
           <span slot="title">订单管理</span>
         </el-menu-item>
-        <el-menu-item index="customerManage" @click="savePath('dataManage')">
-          <i class="el-icon-data-line"></i>
+        <el-menu-item index="customerManage" @click="savePath('customerManage')">
+          <i class="el-icon-s-custom"></i>
           <span slot="title">用户管理</span>
         </el-menu-item>
-        <!--        <el-menu-item index="customerService" @click="savePath('customerService')">-->
-        <!--          <i class="el-icon-menu"></i>-->
-        <!--          <span slot="title">客服管理</span>-->
-        <!--        </el-menu-item>-->
-        <el-submenu index="sysconfig">
+        <el-submenu index="customerService">
           <template slot="title">
-            <i class="el-icon-setting"></i>
+            <i class="el-icon-headset"></i>
             <span>客服管理</span>
           </template>
-          <el-menu-item index="employeeManage" @click="savePath('employeeManage')">
-            <i class="el-icon-user-solid"></i>
+          <el-menu-item index="messageTemplate" @click="savePath('messageTemplate')">
+            <i class="el-icon-postcard"></i>
             <span slot="title">客服模板</span>
           </el-menu-item>
-          <el-menu-item index="employeeManage" @click="savePath('employeeManage')">
-            <i class="el-icon-user-solid"></i>
+          <el-menu-item index="feedBack" @click="savePath('feedBack')">
+            <i class="el-icon-chat-line-round"></i>
             <span slot="title">客户反馈</span>
           </el-menu-item>
         </el-submenu>
-
         <el-submenu index="sysconfig">
           <template slot="title">
             <i class="el-icon-setting"></i>
@@ -81,7 +76,6 @@
             <span slot="title">员工管理</span>
           </el-menu-item>
         </el-submenu>
-
       </el-menu>
     </el-aside>
     <el-container>
