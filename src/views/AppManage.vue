@@ -22,14 +22,14 @@
       border
       style="width: 100%">
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="id"
-        label="应用ID"
-        width="180">
+        label="应用ID">
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="appName"
-        label="应用名称"
-        width="180">
+        label="应用名称">
       </el-table-column>
       <el-table-column
         align="center"
@@ -42,6 +42,15 @@
         </template>
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
+        align="center"
+        label="关联小程序ID">
+        <template slot-scope="scope">
+          {{ scope.row.miniId ? scope.row.miniId : '-' }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        :show-overflow-tooltip="true"
         align="center"
         label="小程序APPID">
         <template slot-scope="scope">
@@ -49,6 +58,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         align="center"
         label="小程序原始">
         <template slot-scope="scope">
@@ -68,16 +78,19 @@
         </template>
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="createTime"
         label="创建时间"
-        width="180">
+      >
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="updateTime"
         label="更新时间"
-        width="180">
+      >
       </el-table-column>
       <el-table-column
+        width="180"
         label="操作"
         align="center">
         <template slot-scope="scope">
@@ -137,6 +150,12 @@
             <el-option :label="game.gameName" :value="game.id" v-for="game in gameList" :key="game.id"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="关联小程序" prop="miniId" v-if="addAppFormData.type==2">
+          <el-select v-model="addAppFormData.miniId" placeholder="请选择关联小程序">
+            <el-option :label="appInfo.appName" :value="appInfo.id" v-for="appInfo in appList"
+                       :key="appInfo.id"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="unShowAndClear(1,'addAppForm')">取 消</el-button>
@@ -144,7 +163,7 @@
       </div>
     </el-dialog>
     <!--修改弹框-->
-    <el-dialog title="新增游戏" :visible.sync="updataDialogFormVisible">
+    <el-dialog title="修改应用" :visible.sync="updataDialogFormVisible">
       <!--form表单-->
       <el-form label-position="right" label-width="120px" :model="updateAppFormData" :rules="rules"
                ref="updateAppForm">
@@ -165,7 +184,7 @@
           <el-form-item label="小程序原始ID" prop="appOriId">
             <el-input v-model="updateAppFormData.appOriId" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="小程序密钥" prop="appSecret">
+          <el-form-item label="小程序密钥">
             <el-input v-model="updateAppFormData.appSecret" autocomplete="off"></el-input>
           </el-form-item>
         </div>
@@ -183,7 +202,7 @@
                        :key="content.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="关联游戏" prop="contentId" v-if="updateAppFormData.showType==3">
+        <el-form-item label="关联游戏" prop="gameId" v-if="updateAppFormData.showType==3">
           <el-select v-model="updateAppFormData.gameId" placeholder="请选关联游戏">
             <el-option :label="game.gameName" :value="game.id" v-for="game in gameList" :key="game.id"></el-option>
           </el-select>
@@ -198,7 +217,7 @@
 </template>
 
 <script>
-import { page, addOrUpdate, deleteById } from '@/api/ApplicationInfo'
+import { page, addOrUpdate, deleteById, queryAppList } from '@/api/ApplicationInfo'
 import { queryGameList } from '@/api/Game'
 import { queryContentList } from '@/api/Content'
 
@@ -273,10 +292,18 @@ export default {
             message: '请选关联游戏',
             trigger: 'change'
           }
+        ],
+        miniId: [
+          {
+            required: true,
+            message: '请选关联小程序',
+            trigger: 'change'
+          }
         ]
       },
       gameList: [],
-      contentList: []
+      contentList: [],
+      appList: []
     }
   },
   methods: {
@@ -284,6 +311,11 @@ export default {
       page(this.pageParam).then(res => {
         this.appPageData = res.data
         console.log(res)
+      })
+    },
+    doQueryAppList () {
+      queryAppList().then(res => {
+        this.appList = res.data
       })
     },
     conditionPage (type) {
@@ -335,10 +367,10 @@ export default {
             this.updateAppFormData.appSecret = ''
             this.updateAppFormData.appOriId = ''
           }
-          if (showType === 1 || showType === 2) {
-            this.updateAppFormData.gameId = ''
+          if (showType === 3) {
+            this.updateAppFormData.contentId = ''
           } else {
-            this.contentId = ''
+            this.updateAppFormData.gameId = ''
           }
 
           // 新增请求
@@ -400,6 +432,7 @@ export default {
     // 查询所有游戏集合
     this.doQueryGameList()
     this.doQueryContentList()
+    this.doQueryAppList()
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item>首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+      <el-breadcrumb-item>客服模板</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="app-header">
       <span>条件查询</span>
@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip="true"
-        prop="wxOpenId"
+        prop="openId"
         align="center"
         label="OpenId">
       </el-table-column>
@@ -102,7 +102,7 @@ import { queryGameList } from '@/api/Game'
 import { queryAppList } from '@/api/ApplicationInfo'
 
 export default {
-  name: 'CustomerManage',
+  name: 'FeedBack',
   data () {
     return {
       pageParam: {

@@ -7,7 +7,7 @@ import router from '@/router'
 const instance = axios.create({
   // baseURL: 'http://192.168.1.5:8222',
   baseURL: 'http://127.0.0.1:8222',
-  timeout: 5000
+  timeout: 8000
 })
 // 请求拦截器
 instance.interceptors.request.use(

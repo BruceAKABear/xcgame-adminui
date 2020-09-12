@@ -95,7 +95,7 @@
         </el-table-column>
       </el-table-column>
       <!--留存率-->
-      <el-table-column label="留存率" align="center">
+      <el-table-column label="创角留存率" align="center">
         <el-table-column
           prop="id"
           label="次日"

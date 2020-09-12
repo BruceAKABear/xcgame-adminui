@@ -6,14 +6,35 @@
     </el-breadcrumb>
 
     <div class="app-header">
-      <el-button size="small" type="primary" @click="addDialogFormVisible=true">新增应用</el-button>
-      <div>
-        <el-radio-group v-model="pageParam.type" size="small" @change="conditionPage">
-          <el-radio-button label="">全部</el-radio-button>
-          <el-radio-button label="1">资讯</el-radio-button>
-          <el-radio-button label="2">壁纸</el-radio-button>
-          <el-radio-button label="3">游戏</el-radio-button>
-        </el-radio-group>
+      <span>条件查询</span>
+      <div class="app-header-content-box">
+        <!--游戏类型-->
+        <el-select v-model="pageParam.appId" placeholder="请选应用" size="small" clearable style="width: 180px">
+          <el-option
+            v-for="app in appList"
+            :key="app.id"
+            :label="app.appName"
+            :value="app.id">
+          </el-option>
+        </el-select>
+        <!--游戏类型-->
+        <el-select v-model="pageParam.gameId" placeholder="请选择游戏" size="small" clearable
+                   style="width: 180px;margin-left: 10px">
+          <el-option
+            v-for="game in gameList"
+            :key="game.id"
+            :label="game.gameName"
+            :value="game.id">
+          </el-option>
+        </el-select>
+        <!--应用选择-->
+        <el-select v-model="pageParam.orderFrom" clearable placeholder="订单来源" size="small"
+                   style="width: 180px;margin-left: 10px">
+          <el-option :value="1 " label="小程序"></el-option>
+          <el-option :value="2" label="H5"></el-option>
+        </el-select>
+        <el-button size="small" type="primary" @click=" doPageQuery" style="margin-left: 10px">查询
+        </el-button>
       </div>
     </div>
     <!--表格-->
@@ -30,16 +51,30 @@
       </el-table-column>
       <el-table-column
         prop="appName"
-        label="商品名称"
+        label="应用名称"
         width="180">
       </el-table-column>
       <el-table-column
+        prop="gameName"
+        label="游戏名称"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="productName"
+        label="商品名"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="totalFee"
         align="center"
-        label="商品价格">
+        label="商品价格(单位：分)">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="订单来源">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.type === 1 ? 'success' : 'warning'">{{
-              scope.row.type === 1 ? '小程序' : 'H5'
-            }}
+          <el-tag :type="scope.row.orderFrom===1?'success':'warning'">
+            {{ scope.row.orderFrom === 1 ? '小程序' : 'H5' }}
           </el-tag>
         </template>
       </el-table-column>
@@ -47,60 +82,87 @@
         align="center"
         label="订单状态">
         <template slot-scope="scope">
-          {{ scope.row.type === 1 ? scope.row.appId : '-' }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="小程序原始">
-        <template slot-scope="scope">
-          {{ scope.row.type === 1 ? scope.row.appOriId : '-' }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="显示类型">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.showType===1?'success':scope.row.showType===2?'warning':'danger'">
+          <el-tag :type="scope.row.orderState===2?'success':scope.row.orderState===1?'warning':'danger'">
             <i
-              :class="scope.row.showType===1?'el-icon-tickets':scope.row.showType===2?'el-icon-picture-outline':'el-icon-coordinate'">
-              {{ scope.row.showType === 1 ? '资讯' : scope.row.showType === 2 ? '壁纸' : '游戏' }}
+              :class="scope.row.orderState===2?'el-icon-check':scope.row.orderState===1?'el-icon-minus':'el-icon-minus'">
+              {{ scope.row.orderState === 2 ? '支付成功' : scope.row.orderState === 1 ? '未支付' : '支付失败' }}
             </i>
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="createTime"
-        label="创建时间"
-        width="180">
+        label="创建时间">
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="updateTime"
-        label="更新时间"
-        width="180">
+        label="更新时间">
       </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
+import { queryGameList } from '@/api/Game'
+import { page } from '@/api/order'
+import { queryAppList } from '@/api/ApplicationInfo'
+
 export default {
   name: 'OrderManage',
   data () {
     return {
       orderPageData: {},
-      pageParam: {}
+      pageParam: {
+        pageNumber: 1,
+        pageSize: 10
+      },
+      gameList: [],
+      appList: []
     }
+  },
+  methods: {
+    doQueryGameList () {
+      queryGameList().then(res => {
+        this.gameList = res.data
+      })
+    },
+    doQueryAppList () {
+      queryAppList().then(res => {
+        this.appList = res.data
+      })
+    },
+    doPageQuery () {
+      page(this.pageParam).then(res => {
+        this.orderPageData = res.data
+      })
+    }
+  },
+  created () {
+    this.doQueryAppList()
+    this.doQueryGameList()
+    this.doPageQuery()
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
 .app-header {
   margin-top: 35px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
+
+  span {
+    color: #909399;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .app-header-content-box {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    display: flex;
+  }
 }
 
 </style>

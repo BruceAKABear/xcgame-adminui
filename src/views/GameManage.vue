@@ -15,9 +15,9 @@
       size="small"
     >
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="id"
-        label="ID"
-        width="180">
+        label="游戏ID">
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip="true"
@@ -30,14 +30,14 @@
         label="APPSecret">
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="gameName"
-        label="游戏名"
-        width="150">
+        label="游戏名">
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="gameCompany"
-        label="游戏所属公司"
-        width="150">
+        label="游戏所属公司">
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip="true"

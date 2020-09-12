@@ -13,6 +13,8 @@ import CustomerService from '@/views/CustomerService'
 import EmployeeManage from '@/views/EmployeeManage'
 import OrderManage from '@/views/OrderManage'
 import CustomerManage from '@/views/CustomerManage'
+import ServiceTemplate from '@/views/ServiceTemplate'
+import FeedBack from '@/views/FeedBack'
 
 Vue.use(VueRouter)
 
@@ -75,6 +77,16 @@ const routes = [
         path: '/customerManage',
         name: 'CustomerManage',
         component: CustomerManage
+      },
+      {
+        path: '/serviceTemplate',
+        name: 'ServiceTemplate',
+        component: ServiceTemplate
+      },
+      {
+        path: '/feedBack',
+        name: 'FeedBack',
+        component: FeedBack
       }
     ]
   }, {

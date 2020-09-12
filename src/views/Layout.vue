@@ -57,7 +57,7 @@
             <i class="el-icon-headset"></i>
             <span>客服管理</span>
           </template>
-          <el-menu-item index="messageTemplate" @click="savePath('messageTemplate')">
+          <el-menu-item index="serviceTemplate" @click="savePath('serviceTemplate')">
             <i class="el-icon-postcard"></i>
             <span slot="title">客服模板</span>
           </el-menu-item>

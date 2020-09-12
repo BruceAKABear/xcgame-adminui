@@ -40,6 +40,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        align="center"
         label="员工类型">
         <template slot-scope="scope">
           <el-tag :type="scope.row.isAdmin?'success':'info'">
@@ -48,16 +49,17 @@
         </template>
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="createTime"
-        label="创建时间"
-        width="180">
+        label="创建时间">
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         prop="updateTime"
-        label="更新时间"
-        width="180">
+        label="更新时间">
       </el-table-column>
       <el-table-column
+        width="180"
         label="操作"
         align="center">
         <template slot-scope="scope">
