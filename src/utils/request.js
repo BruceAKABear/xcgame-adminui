@@ -6,7 +6,8 @@ import router from '@/router'
 // create an axios instance
 const instance = axios.create({
   // baseURL: 'http://192.168.1.5:8222',
-  baseURL: 'http://127.0.0.1:8222',
+  // baseURL: 'http://127.0.0.1:8222',
+  baseURL: 'http://192.168.101.19:8222',
   timeout: 8000
 })
 // 请求拦截器

@@ -91,36 +91,34 @@
             <el-option label="壁纸" value="2"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="资讯标题" v-if="addContentFormData.type==1">
+          <el-input v-model="addContentFormData.infoTitle" autocomplete="off"></el-input>
+        </el-form-item>
+         <el-form-item label="资讯简介" v-if="addContentFormData.type==1">
+          <el-input v-model="addContentFormData.abstract" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="资讯详情" type="textarea" v-if="addContentFormData.type==1">
+          <el-input v-model="addContentFormData.infoDetails" autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="内容备注">
           <el-input v-model="addContentFormData.remarks" autocomplete="off"></el-input>
         </el-form-item>
-
-<!--        <div style="border: solid 1px #909399;padding: 10px">-->
-<!--          <el-form-item label="条目标题">-->
-<!--            <el-input v-model="addContentFormData.remarks" autocomplete="off"></el-input>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="条目描述">-->
-<!--            <el-input v-model="addContentFormData.remarks" autocomplete="off"></el-input>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="主图">-->
-<!--            <el-upload-->
-<!--              class="upload-demo"-->
-<!--              action="http://127.0.0.1:8222/image/upload"-->
-<!--              name="file"-->
-<!--              :headers="uploadHeader"-->
-<!--              :on-remove="handleRemovePic"-->
-<!--              :file-list="picList"-->
-<!--              :on-success="successUpload"-->
-<!--              list-type="picture"-->
-<!--            >-->
-<!--              <el-button size="small" type="primary">点击上传</el-button>-->
-<!--              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>-->
-<!--            </el-upload>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="资讯详情" prop="remarks">-->
-<!--            <quill-editor ref="text" v-model="informationContent" style="height:200px;"/>-->
-<!--          </el-form-item>-->
-<!--        </div>-->
+        <el-form-item label="上传图片" v-if="addContentFormData.type==1">
+          <el-upload
+            class="upload-demo"
+            action="http://127.0.0.1:8222/image/upload"
+            name="file"
+            :headers="uploadHeader"
+            :on-remove="handleRemovePic"
+            :file-list="picList"
+            :on-success="successUpload"
+            list-type="picture"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
+          </el-upload>
+          <el-input v-if="addContentFormData.type==1"  autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="上传壁纸" v-if="addContentFormData.type==2">
           <el-upload
             class="upload-demo"
@@ -244,6 +242,27 @@ export default {
             required: true,
             message: '请选择内容类型',
             trigger: 'change'
+          }
+        ],
+        infoTitle: [
+          {
+            required: true,
+            message: '请输入资讯标题',
+            trigger: 'blur'
+          }
+        ],
+        abstract: [
+          {
+            required: true,
+            message: '请输入资讯简介',
+            trigger: 'blur'
+          }
+        ],
+        infoDetails: [
+          {
+            required: true,
+            message: '请输入资讯详情',
+            trigger: 'blur'
           }
         ],
         remarks: [
