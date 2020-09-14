@@ -17,13 +17,13 @@
           </el-option>
         </el-select>
         <!--应用选择-->
-        <el-select v-model="pageParam.appId" placeholder="请选择应用" size="small" clearable
+        <el-select v-model="pageParam.appId" placeholder="请选择小程序" size="small" clearable
                    style="width: 180px;margin-left: 10px">
           <el-option
             v-for="app in appList"
             :key="app.id"
             :label="app.appName"
-            :value="app.id">
+            :value="app.appId">
           </el-option>
         </el-select>
         <el-button size="small" type="primary" @click=" doPageQuery" style="margin-left: 10px">查询</el-button>
@@ -31,65 +31,68 @@
     </div>
     <el-table
       size="small"
-      :data="customerPageData.records"
+      :data="feedbackPageData.records"
       height="500"
       border
       style="width: 100%">
       <el-table-column
         prop="id"
-        label="用户ID"
+        label="消息ID"
         width="180">
       </el-table-column>
       <el-table-column
+        prop="miniName"
         align="center"
-        label="手机号">
-        <template slot-scope="scope">
-          {{ scope.row.phoneNumber ? scope.row.phoneNumber : '-' }}
-        </template>
+        label="所属小程序">
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip="true"
-        prop="openId"
+        prop="userOpenId"
         align="center"
-        label="OpenId">
+        label="用户openId">
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip="true"
         prop="nickName"
         align="center"
-        label="用户昵称">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="所属应用APPID">
+        label="消息类型">
         <template slot-scope="scope">
-          {{ scope.row.appId ? scope.row.appId : '-' }}
+          <el-tag :type="scope.row.msgType==='text'?'success':'warning'">
+            {{ scope.row.msgType === 'text' ? '文本' : '照片' }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column
-        prop="appName"
-        label="所属应用">
-      </el-table-column>
-      <el-table-column
-        prop="gameName"
-        label="所属游戏">
+        :show-overflow-tooltip="true"
+        prop="content"
+        label="文本内容">
       </el-table-column>
       <el-table-column
         align="center"
-        label="注册类型">
+        label="是否回复">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.regType===1?'success':'warning'">
-            <i
-              :class="scope.row.regType===1?'el-icon-tickets':'el-icon-picture-outline'">
-              {{ scope.row.regType === 1 ? '小程序' : 'H5' }}
-            </i>
+          <el-tag :type="scope.row.answered?'success':'warning'">
+            {{ scope.row.answered ? '已回复' : '未回复' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column
         prop="createTime"
-        label="注册时间"
+        label="提交时间"
         width="180">
+      </el-table-column>
+
+      <el-table-column
+        width="180"
+        label="操作"
+        align="center">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="handleEdit(scope.row)">详情
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -97,9 +100,9 @@
 </template>
 
 <script>
-import { page } from '@/api/Customer'
 import { queryGameList } from '@/api/Game'
 import { queryAppList } from '@/api/ApplicationInfo'
+import { page } from '@/api/feedback'
 
 export default {
   name: 'FeedBack',
@@ -111,7 +114,7 @@ export default {
         appId: '',
         gameId: ''
       },
-      customerPageData: {},
+      feedbackPageData: {},
       gameList: [],
       appList: []
     }
@@ -119,7 +122,8 @@ export default {
   methods: {
     doPageQuery () {
       page(this.pageParam).then(res => {
-        this.customerPageData = res.data
+        console.log('-==--==-', res.data)
+        this.feedbackPageData = res.data
       })
     },
     doQueryGameList () {
