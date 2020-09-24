@@ -10,3 +10,4 @@ export const page = data => createAPI('/content/page', 'get', data)
 export const deleteById = data => createAPI('/content/deleteById', 'get', data)
 // 查询游戏集合供下拉
 export const queryContentList = data => createAPI('/content/queryContentList', 'get', data)
+export const queryBinded = data => createAPI('/content/queryBinded', 'get', data)

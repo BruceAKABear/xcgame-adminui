@@ -12,7 +12,7 @@
     <el-table
       size="small"
       :data="employeePageData.records"
-      height="500"
+      height="550"
       border
       style="width: 100%">
       <el-table-column
@@ -75,6 +75,16 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!--分頁-->
+    <div style="margin-top: 10px;display: flex;justify-content: center" v-if="employeePageData.total>10">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change="pageNumberChange"
+        :total="employeePageData.total">
+      </el-pagination>
+    </div>
 
     <!--新增弹框-->
     <el-dialog title="新增内容" :visible.sync="addDialogFormVisible" @close="unShowAndClear(1,'addEmployeeForm')">
@@ -233,6 +243,10 @@ export default {
     handleEdit (row) {
       this.updateEmployeeFormData = row
       this.updataDialogFormVisible = true
+    },
+    pageNumberChange (res) {
+      this.pageParam.pageNumber = res
+      this.doPageQuery()
     }
   },
   created () {

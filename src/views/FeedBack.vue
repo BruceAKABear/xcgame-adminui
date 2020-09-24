@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item>首页</el-breadcrumb-item>
-      <el-breadcrumb-item>客服模板</el-breadcrumb-item>
+      <el-breadcrumb-item>用户反馈</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="app-header">
       <span>条件查询</span>
@@ -32,7 +32,7 @@
     <el-table
       size="small"
       :data="feedbackPageData.records"
-      height="500"
+      height="550"
       border
       style="width: 100%">
       <el-table-column
@@ -95,6 +95,64 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--分頁-->
+    <div style="margin-top: 10px;display: flex;justify-content: center" v-if="feedbackPageData.total>10">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change="pageNumberChange"
+        :total="feedbackPageData.total">
+      </el-pagination>
+    </div>
+
+    <el-dialog title="消息详情" :visible.sync="dialogVisible" @close="dialogVisible=false">
+      <!--用户消息框-->
+      <el-card shadow="always">
+        <div>
+          <div>
+            <span style="font-size: 25px;color: #909399">用户消息</span>
+            <el-divider></el-divider>
+          </div>
+          <div style="margin-top: 30px;font-size: 16px;color: #909399">
+            <div>
+              <span>用户ID:{{ rowData.userOpenId }}</span>
+            </div>
+            <div style="margin-top: 10px">
+              <span>提交时间:{{ rowData.createTime }}</span>
+            </div>
+            <div style="margin-top: 10px;font-size: 18px">
+              内容:
+              <span style="margin-left: 5px" v-if="rowData.msgType==='text'">{{ rowData.content }}</span>
+              <el-image v-if="rowData.msgType==='image'" :src="rowData.picUrl"></el-image>
+            </div>
+          </div>
+        </div>
+      </el-card>
+      <el-card shadow="always" style="margin-top: 40px" v-if="rowData.answered">
+        <div>
+          <div>
+            <span style="font-size: 25px;color: #909399">回复消息</span>
+            <el-divider></el-divider>
+          </div>
+          <div style="margin-top: 30px;font-size: 16px;color: #909399">
+            <div style="margin-top: 10px">
+              <span>提交时间:{{ rowData.replyTime }}</span>
+            </div>
+            <div style="margin-top: 10px;font-size: 18px">
+              内容:<span style="margin-left: 5px">{{ rowData.replyContent }}</span>
+            </div>
+          </div>
+        </div>
+      </el-card>
+      <!--form表单-->
+      <div slot="footer" class="dialog-footer" v-if="!rowData.answered">
+        <el-input type="textarea" v-model="replyMessage"></el-input>
+        <div style="margin-top: 10px;width: 100%">
+          <el-button type="primary" size="medium" @click="doReply">回复</el-button>
+        </div>
+      </div>
+    </el-dialog>
+
   </div>
 
 </template>
@@ -102,7 +160,7 @@
 <script>
 import { queryGameList } from '@/api/Game'
 import { queryAppList } from '@/api/ApplicationInfo'
-import { page } from '@/api/feedback'
+import { page, reply } from '@/api/feedback'
 
 export default {
   name: 'FeedBack',
@@ -116,13 +174,16 @@ export default {
       },
       feedbackPageData: {},
       gameList: [],
-      appList: []
+      appList: [],
+      dialogVisible: false,
+      rowData: {},
+      replyMessage: ''
     }
   },
   methods: {
     doPageQuery () {
       page(this.pageParam).then(res => {
-        console.log('-==--==-', res.data)
+        console.log(res.data, '--------------')
         this.feedbackPageData = res.data
       })
     },
@@ -135,6 +196,31 @@ export default {
       queryAppList().then(res => {
         this.appList = res.data
       })
+    },
+    handleEdit (row) {
+      console.log(row)
+      this.rowData = row
+      this.dialogVisible = true
+    },
+    doReply () {
+      if (this.replyMessage === '') {
+        this.$message.error('必须填写回复消息')
+      } else {
+        reply({
+          messageId: this.rowData.id,
+          replyType: 1,
+          content: this.replyMessage
+        }).then(res => {
+          this.$message.success('消息回复成功')
+          this.dialogVisible = false
+          this.replyMessage = ''
+          this.doPageQuery()
+        })
+      }
+    },
+    pageNumberChange (res) {
+      this.pageParam.pageNumber = res
+      this.doPageQuery()
     }
   },
   created () {

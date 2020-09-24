@@ -32,66 +32,76 @@
     <el-table
       size="small"
       :data="customerPageData.records"
-      height="500"
+      height="550"
       border
       style="width: 100%">
       <el-table-column
+        align="center"
         prop="id"
         label="用户ID"
         width="180">
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         align="center"
-        label="手机号">
+        label="微信openId">
         <template slot-scope="scope">
-          {{ scope.row.phoneNumber ? scope.row.phoneNumber : '-' }}
+          <span>{{ scope.row.openId ? scope.row.openId : '-' }}</span>
         </template>
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip="true"
-        prop="wxOpenId"
         align="center"
-        label="OpenId">
-      </el-table-column>
-      <el-table-column
-        :show-overflow-tooltip="true"
-        prop="nickName"
-        align="center"
-        label="用户昵称">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="所属应用APPID">
+        label="微信昵称">
         <template slot-scope="scope">
-          {{ scope.row.appId ? scope.row.appId : '-' }}
+          <span>{{ scope.row.nickName ? scope.row.nickName : '-' }}</span>
         </template>
       </el-table-column>
       <el-table-column
+        align="center"
         prop="appName"
         label="所属应用">
       </el-table-column>
       <el-table-column
+        align="center"
         prop="gameName"
         label="所属游戏">
       </el-table-column>
       <el-table-column
         align="center"
-        label="注册类型">
+        label="是否关注公众号">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.regType===1?'success':'warning'">
+          <el-tag :type="scope.row.subscribe?'success':'warning'">
             <i
-              :class="scope.row.regType===1?'el-icon-tickets':'el-icon-picture-outline'">
-              {{ scope.row.regType === 1 ? '小程序' : 'H5' }}
+              :class="scope.row.subscribe?'el-icon-star-on':'el-icon-star-off'">
+              {{ scope.row.subscribe ? '已关注' : '未关注' }}
             </i>
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column
+        align="center"
         prop="createTime"
         label="注册时间"
         width="180">
       </el-table-column>
+      <el-table-column
+        align="center"
+        prop="updateTime"
+        label="更新时间"
+        width="180">
+      </el-table-column>
     </el-table>
+
+    <!--分頁-->
+    <div style="margin-top: 10px;display: flex;justify-content: center" v-if="customerPageData.total>10">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change="pageNumberChange"
+        :total="customerPageData.total">
+      </el-pagination>
+    </div>
   </div>
 
 </template>
@@ -131,6 +141,10 @@ export default {
       queryAppList().then(res => {
         this.appList = res.data
       })
+    },
+    pageNumberChange (res) {
+      this.pageParam.pageNumber = res
+      this.doPageQuery()
     }
   },
   created () {

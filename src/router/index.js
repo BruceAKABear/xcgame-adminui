@@ -15,6 +15,7 @@ import OrderManage from '@/views/OrderManage'
 import CustomerManage from '@/views/CustomerManage'
 import ServiceTemplate from '@/views/ServiceTemplate'
 import FeedBack from '@/views/FeedBack'
+import ContentItemManage from '@/views/ContentItemManage'
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,10 @@ const routes = [
         path: '/contentManage',
         name: 'ContentManage',
         component: ContentManage
+      }, {
+        path: '/contentItemManage',
+        name: 'ContentItemManage',
+        component: ContentItemManage
       },
       {
         path: '/dataManage',

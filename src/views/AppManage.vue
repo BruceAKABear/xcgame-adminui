@@ -18,15 +18,17 @@
     <el-table
       size="small"
       :data="appPageData.records"
-      height="500"
+      height="550"
       border
       style="width: 100%">
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="id"
         label="应用ID">
       </el-table-column>
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="appName"
         label="应用名称">
@@ -78,12 +80,14 @@
         </template>
       </el-table-column>
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="createTime"
         label="创建时间"
       >
       </el-table-column>
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="updateTime"
         label="更新时间"
@@ -106,6 +110,17 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!--分頁-->
+    <div style="margin-top: 10px;display: flex;justify-content: center" v-if="appPageData.total>10">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change="pageNumberChange"
+        :total="appPageData.total">
+      </el-pagination>
+    </div>
+
     <!--新增弹框-->
     <el-dialog title="新增应用" :visible.sync="addDialogFormVisible" @close="unShowAndClear(1,'addAppForm')">
       <!--form表单-->
@@ -130,8 +145,13 @@
           <el-form-item label="小程序密钥" prop="appSecret">
             <el-input v-model="addAppFormData.appSecret" autocomplete="off"></el-input>
           </el-form-item>
+          <el-form-item label="MsgToken" prop="messageToken">
+            <el-input v-model="addAppFormData.messageToken" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="EncodingKey" prop="encodingKey">
+            <el-input v-model="addAppFormData.encodingKey" autocomplete="off"></el-input>
+          </el-form-item>
         </div>
-
         <el-form-item label="应用显示类型" prop="showType">
           <el-select v-model="addAppFormData.showType" placeholder="请选择显示类型">
             <el-option label="资讯" :value="1"></el-option>
@@ -139,7 +159,7 @@
             <el-option label="游戏" :value="3"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="关联内容" prop="contentId" v-if="addAppFormData.showType==1||addAppFormData.showType==2">
+        <el-form-item label="关联内容组" prop="contentId" v-if="addAppFormData.showType==1||addAppFormData.showType==2">
           <el-select v-model="addAppFormData.contentId" placeholder="请选关联内容">
             <el-option :label="content.title" :value="content.id" v-for="content in contentList"
                        :key="content.id"></el-option>
@@ -186,6 +206,12 @@
           </el-form-item>
           <el-form-item label="小程序密钥">
             <el-input v-model="updateAppFormData.appSecret" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="MsgToken" prop="messageToken">
+            <el-input v-model="updateAppFormData.messageToken" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="EncodingKey" prop="encodingKey">
+            <el-input v-model="updateAppFormData.encodingKey" autocomplete="off"></el-input>
           </el-form-item>
         </div>
 
@@ -262,6 +288,20 @@ export default {
           {
             required: true,
             message: '请填写小程序密钥',
+            trigger: 'change'
+          }
+        ],
+        messageToken: [
+          {
+            required: true,
+            message: '请填写小程序MessageToken',
+            trigger: 'change'
+          }
+        ],
+        encodingKey: [
+          {
+            required: true,
+            message: '请填写小程序EncodingKey',
             trigger: 'change'
           }
         ],
@@ -425,6 +465,10 @@ export default {
       queryContentList({}).then(res => {
         this.contentList = res.data
       })
+    },
+    pageNumberChange (res) {
+      this.pageParam.pageNumber = res
+      this.doPageQuery()
     }
   },
   created () {

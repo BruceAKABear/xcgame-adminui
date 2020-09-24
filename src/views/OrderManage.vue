@@ -41,7 +41,7 @@
     <el-table
       size="small"
       :data="orderPageData.records"
-      height="500"
+      height="550"
       border
       style="width: 100%">
       <el-table-column
@@ -91,6 +91,18 @@
         </template>
       </el-table-column>
       <el-table-column
+        align="center"
+        label="支付回调状态">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.orderState===2?'success':scope.row.orderState===1?'warning':'danger'">
+            <i
+              :class="scope.row.orderState===2?'el-icon-check':scope.row.orderState===1?'el-icon-minus':'el-icon-minus'">
+              {{ scope.row.orderState === 2 ? '回调成功' : '回调失败' }}
+            </i>
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         :show-overflow-tooltip="true"
         prop="createTime"
         label="创建时间">
@@ -101,6 +113,16 @@
         label="更新时间">
       </el-table-column>
     </el-table>
+
+    <!--分頁-->
+    <div style="margin-top: 10px;display: flex;justify-content: center" v-if="orderPageData.total>10">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change="pageNumberChange"
+        :total="orderPageData.total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -137,6 +159,10 @@ export default {
       page(this.pageParam).then(res => {
         this.orderPageData = res.data
       })
+    },
+    pageNumberChange (res) {
+      this.pageParam.pageNumber = res
+      this.doPageQuery()
     }
   },
   created () {

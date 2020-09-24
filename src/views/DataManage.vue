@@ -47,7 +47,7 @@
     <!--表格-->
     <el-table
       :data="dataPageData.records"
-      height="500"
+      height="600"
       border
       style="width: 100%"
       size="small"
@@ -140,6 +140,17 @@
         </el-table-column>
       </el-table-column>
     </el-table>
+
+    <!--分頁-->
+    <div style="margin-top: 10px;display: flex;justify-content: center" v-if="dataPageData.total>10">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change="pageNumberChange"
+        :total="dataPageData.total">
+      </el-pagination>
+    </div>
+
   </div>
 
 </template>
@@ -178,6 +189,10 @@ export default {
       page(this.pageParam).then(res => {
         this.dataPageData = res.data
       })
+    },
+    pageNumberChange (res) {
+      this.pageParam.pageNumber = res
+      this.doPageQuery()
     }
   },
   created () {

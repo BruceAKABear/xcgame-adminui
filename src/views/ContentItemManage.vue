@@ -2,10 +2,10 @@
   <div>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item>首页</el-breadcrumb-item>
-      <el-breadcrumb-item>内容管理</el-breadcrumb-item>
+      <el-breadcrumb-item>内容条目管理</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="app-header">
-      <el-button size="small" type="primary" @click="addDialogFormVisible=true">新增内容</el-button>
+      <el-button size="small" type="primary" @click="addDialogFormVisible=true">新增条目</el-button>
       <div>
         <el-radio-group v-model="pageParam.type" size="small" @change="doPageQuery">
           <el-radio-button label="">全部</el-radio-button>
@@ -17,27 +17,26 @@
     <el-table
       size="small"
       :data="contentPageData.records"
-      height="550"
+      height="600"
       border
       style="width: 100%">
       <el-table-column
         prop="id"
         label="ID"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="title"
-        label="组名"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="remarks"
-        label="备注"
       >
       </el-table-column>
       <el-table-column
-        label="组类型"
-        width="180"
+        prop="title"
+        label="标题"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="descrip"
+        label="描述"
+      >
+      </el-table-column>
+      <el-table-column
+        label="类型"
         align="center"
       >
         <template slot-scope="scope">
@@ -49,18 +48,15 @@
       </el-table-column>
       <el-table-column
         prop="createTime"
-        label="创建时间"
-        width="180">
+        label="创建时间">
       </el-table-column>
       <el-table-column
         prop="updateTime"
-        label="更新时间"
-        width="180">
+        label="更新时间">
       </el-table-column>
       <el-table-column
         label="操作"
-        align="center"
-        width="180">
+        align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -85,63 +81,89 @@
       </el-pagination>
     </div>
     <!--新增弹框-->
-    <el-dialog title="新增内容" :visible.sync="addDialogFormVisible" @close="unShowAndClear(1,'addContentForm')">
+    <el-dialog title="新增条目" :visible.sync="addDialogFormVisible" @close="unShowAndClear(1,'addForm')">
       <!--form表单-->
-      <el-form label-position="right" label-width="120px" :model="addContentFormData" :rules="rules"
-               ref="addContentForm">
-        <el-form-item label="组名" prop="title">
-          <el-input v-model="addContentFormData.title" autocomplete="off"></el-input>
+      <el-form label-position="right" label-width="120px" :model="addFormData" :rules="rules"
+               ref="addForm">
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="addFormData.title" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="类型" prop="type">
-          <el-select v-model="addContentFormData.type" placeholder="请选择应用类型">
+          <el-select v-model="addFormData.type" placeholder="请选择类型">
             <el-option label="资讯" :value="1"></el-option>
             <el-option label="壁纸" :value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="备注">
-          <el-input v-model="addContentFormData.remarks" autocomplete="off"></el-input>
+        <el-form-item label="描述">
+          <el-input type="textarea" v-model="addFormData.descrip" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="关联内容条目">
-          <el-checkbox-group v-model="addContentFormData.itemIds">
-            <el-checkbox :label="singleItem.id" v-for="singleItem in itemList"
-                         :key="singleItem.id">{{ singleItem.title }}
-            </el-checkbox>
-          </el-checkbox-group>
+        <el-form-item label="主图">
+          <el-upload
+            class="upload-demo"
+            :action="imageUploadUrl"
+            name="file"
+            :limit="1"
+            :headers="uploadHeader"
+            :on-remove="handleRemovePic"
+            :file-list="picList"
+            :on-success="successUpload"
+            list-type="picture"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传一个图片，同时只能上传jpg/png文件，且不超过10MB</div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="内容" style="height: 550px">
+          <quill-editor v-model="addFormData.content" ref="myQuillEditor" style="height: 400px;">
+          </quill-editor>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="unShowAndClear(1,'addContentForm')">取 消</el-button>
-        <el-button type="primary" @click="saveContent('addContentForm')">确 定</el-button>
+        <el-button @click="unShowAndClear(1,'addForm')">取 消</el-button>
+        <el-button type="primary" @click="saveForm('addForm')">确 定</el-button>
       </div>
     </el-dialog>
     <!--修改弹框-->
-    <el-dialog title="修改内容" :visible.sync="updataDialogFormVisible" @close="unShowAndClear(2,'updateContentForm')">
+    <el-dialog title="修改内容" :visible.sync="updataDialogFormVisible" @close="unShowAndClear(2,'updateForm')">
       <!--form表单-->
-      <el-form label-position="right" label-width="120px" :model="updateContentFormData" :rules="rules"
-               ref="updateContentForm">
-        <el-form-item label="组名" prop="title">
-          <el-input v-model="updateContentFormData.title" autocomplete="off"></el-input>
+      <el-form label-position="right" label-width="120px" :model="updateFormData" :rules="rules"
+               ref="updateForm">
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="updateFormData.title" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="类型" prop="type">
-          <el-select v-model="updateContentFormData.type" placeholder="请选择内容类型" disabled>
+          <el-select v-model="updateFormData.type" placeholder="请选择类型">
             <el-option label="资讯" :value="1"></el-option>
             <el-option label="壁纸" :value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="备注" prop="remarks">
-          <el-input v-model="updateContentFormData.remarks" autocomplete="off"></el-input>
+        <el-form-item label="描述">
+          <el-input type="textarea" v-model="updateFormData.descrip" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="关联内容条目">
-          <el-checkbox-group v-model="updateContentFormData.itemIds">
-            <el-checkbox :label="singleItem.id" v-for="singleItem in itemList"
-                         :key="singleItem.id">{{ singleItem.title }}
-            </el-checkbox>
-          </el-checkbox-group>
+        <el-form-item label="主图">
+          <el-upload
+            class="upload-demo"
+            :action="imageUploadUrl"
+            name="file"
+            :limit="1"
+            :headers="uploadHeader"
+            :on-remove="handleRemovePic"
+            :file-list="picList"
+            :on-success="successUpload"
+            list-type="picture"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="内容" style="height: 550px">
+          <quill-editor v-model="updateFormData.content" ref="myQuillEditor" style="height: 500px;">
+          </quill-editor>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="unShowAndClear(2,'updateContentForm')">取 消</el-button>
-        <el-button type="primary" @click="updateContent('updateContentForm')">确 定</el-button>
+        <el-button @click="unShowAndClear(2,'updateForm')">取 消</el-button>
+        <el-button type="primary" @click="updateContent('updateForm')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -149,17 +171,20 @@
 </template>
 
 <script>
-import { addOrUpdate, deleteById, page, queryBinded } from '@/api/Content'
-import { queryList } from '@/api/ContentItem'
+import { addOrUpdate, deleteById, page } from '@/api/ContentItem'
 import { getToken } from '@/utils/TokenUtil'
+import { quillEditor } from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
 export default {
-  name: 'ContentManage',
+  name: 'ContentItemManage',
   data () {
     return {
-      itemList: [],
-      checkedList: [],
-      informationContent: '',
+      imageUploadUrl: 'http://127.0.0.1:8222/image/upload',
+      addFormData: {},
+      updateFormData: {},
       pageParam: {
         pageNumber: 1,
         pageSize: 10,
@@ -168,18 +193,21 @@ export default {
       addDialogFormVisible: false,
       updataDialogFormVisible: false,
       contentPageData: {},
-      addContentFormData: {
-        itemIds: []
-      },
-      updateContentFormData: {
-        itemIds: []
-      },
+      addContentFormData: {},
+      updateContentFormData: {},
       rules: {
         title: [
           {
             required: true,
             message: '请输入内容标题',
             trigger: 'blur'
+          }
+        ],
+        headPic: [
+          {
+            required: true,
+            message: '请上传主图',
+            trigger: 'change'
           }
         ],
         type: [
@@ -254,20 +282,15 @@ export default {
         ]
       },
       picList: [],
-      infoList: [],
-      infoItem: {},
       uploadHeader: {
         token: '123'
       }
     }
   },
+  components: {
+    quillEditor
+  },
   methods: {
-    doQueryItemList () {
-      queryList().then(res => {
-        console.log(res)
-        this.itemList = res.data
-      })
-    },
     doPageQuery () {
       page(this.pageParam).then(res => {
         this.contentPageData = res.data
@@ -275,31 +298,29 @@ export default {
     },
     handleDel (rowData) {
       deleteById({ id: rowData.id }).then(res => {
-        console.log(res)
         this.$message.success('删除成功')
         // 重新查询数据
         this.doPageQuery()
       })
     },
     handleEdit (row) {
-      // 查询已绑定的内容条目
-      queryBinded({ groupId: row.id }).then(res => {
-        this.updateContentFormData = row
-        this.updataDialogFormVisible = true
-        this.updateContentFormData.itemIds = res.data
-      })
+      this.updateFormData = row
+      this.updataDialogFormVisible = true
+      this.picList.push({ url: row.headPic })
     },
-    saveContent (formName) {
+    saveForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.addFormData.headPic = this.picList[0].url
           // 新增请求
-          addOrUpdate(this.addContentFormData).then(res => {
-            this.addContentFormData = {}
+          addOrUpdate(this.addFormData).then(res => {
             this.$message.success('新增成功')
             // 清空
             this.$refs[formName].resetFields()
+            this.picList = []
             // 隐藏
             this.addDialogFormVisible = false
+            this.addFormData = {}
             // 再次请求列表
             this.doPageQuery()
           })
@@ -312,8 +333,9 @@ export default {
     updateContent (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.updateFormData.headPic = this.picList[0].url
           // 新增请求
-          addOrUpdate(this.updateContentFormData).then(res => {
+          addOrUpdate(this.updateFormData).then(res => {
             this.$message.success('修改成功')
             // 清空
             this.$refs[formName].resetFields()
@@ -355,7 +377,6 @@ export default {
   created () {
     this.doPageQuery()
     this.setToken()
-    this.doQueryItemList()
   }
 }
 </script>

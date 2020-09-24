@@ -36,10 +36,20 @@
           <i class="el-icon-menu"></i>
           <span slot="title">游戏管理</span>
         </el-menu-item>
-        <el-menu-item index="contentManage" @click="savePath('contentManage')">
-          <i class="el-icon-document-copy"></i>
-          <span slot="title">内容管理</span>
-        </el-menu-item>
+        <el-submenu index="conMana">
+          <template slot="title">
+            <i class="el-icon-document-copy"></i>
+            <span>内容管理</span>
+          </template>
+          <el-menu-item index="contentManage" @click="savePath('contentManage')">
+            <i class="el-icon-folder"></i>
+            <span slot="title">内容组管理</span>
+          </el-menu-item>
+          <el-menu-item index="contentItemManage" @click="savePath('contentItemManage')">
+            <i class="el-icon-s-order"></i>
+            <span slot="title">内容条目管理</span>
+          </el-menu-item>
+        </el-submenu>
         <el-menu-item index="dataManage" @click="savePath('dataManage')">
           <i class="el-icon-data-line"></i>
           <span slot="title">数据管理</span>

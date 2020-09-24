@@ -9,52 +9,61 @@
     </div>
     <el-table
       :data="pageData.records"
-      height="400"
+      height="550"
       border
       style="width: 100%"
       size="small"
     >
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="id"
         label="游戏ID">
       </el-table-column>
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="appId"
         label="APPID">
       </el-table-column>
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="appSecret"
         label="APPSecret">
       </el-table-column>
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="gameName"
         label="游戏名">
       </el-table-column>
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="gameCompany"
         label="游戏所属公司">
       </el-table-column>
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="gameH5Url"
         label="游戏H5访问地址">
       </el-table-column>
       <el-table-column
+        align="center"
         :show-overflow-tooltip="true"
         prop="payCallbackUrl"
         label="游戏支付回调URL">
       </el-table-column>
       <el-table-column
+        align="center"
         prop="createTime"
         label="新增时间"
         width="180">
       </el-table-column>
       <el-table-column
+        align="center"
         prop="updateTime"
         label="更新时间"
         width="180">
@@ -78,6 +87,17 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!--分頁-->
+    <div style="margin-top: 10px;display: flex;justify-content: center" v-if="pageData.total>10">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change="pageNumberChange"
+        :total="pageData.total">
+      </el-pagination>
+    </div>
+
     <!--新增弹框-->
     <el-dialog title="新增游戏" :visible.sync="dialogFormVisible" @close="unShowAndClear(1,'addGameForm')">
       <!--form表单-->
@@ -122,6 +142,25 @@
         </el-form-item>
         <el-form-item label="支付回调URL" prop="payCallbackUrl">
           <el-input v-model="updateGameFormData.payCallbackUrl" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="游戏描述" prop="payCallbackUrl">
+          <el-input v-model="updateGameFormData.gameDesc" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="游戏头像" prop="payCallbackUrl">
+          <el-upload
+            class="upload-demo"
+            :action="imageUploadUrl"
+            name="file"
+            :limit="1"
+            :headers="uploadHeader"
+            :on-remove="handleRemovePic"
+            :file-list="picList"
+            :on-success="successUpload"
+            list-type="picture"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
+          </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -258,6 +297,10 @@ export default {
           this.doPageQuery()
         })
       })
+    },
+    pageNumberChange (res) {
+      this.pageParam.pageNumber = res
+      this.doPageQuery()
     }
   },
   created () {
