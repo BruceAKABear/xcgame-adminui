@@ -10,6 +10,7 @@
     </div>
     <!--表格-->
     <el-table
+      :header-cell-style="{background:'#eef1f6',color:'#606266'}"
       size="small"
       :data="employeePageData.records"
       height="550"

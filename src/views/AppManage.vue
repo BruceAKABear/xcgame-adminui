@@ -16,7 +16,8 @@
       </div>
     </div>
     <el-table
-      size="small"
+      :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+      size="mini"
       :data="appPageData.records"
       height="550"
       border
@@ -154,8 +155,8 @@
         </div>
         <el-form-item label="应用显示类型" prop="showType">
           <el-select v-model="addAppFormData.showType" placeholder="请选择显示类型">
-            <el-option label="资讯" :value="1"></el-option>
-            <el-option label="壁纸" :value="2"></el-option>
+            <el-option label="资讯" :value="1" v-if="addAppFormData.type==1"></el-option>
+            <el-option label="壁纸" :value="2" v-if="addAppFormData.type==1"></el-option>
             <el-option label="游戏" :value="3"></el-option>
           </el-select>
         </el-form-item>
@@ -170,18 +171,13 @@
             <el-option :label="game.gameName" :value="game.id" v-for="game in gameList" :key="game.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="关联小程序" prop="miniId" v-if="addAppFormData.type==2">
-          <el-select v-model="addAppFormData.miniId" placeholder="请选择关联小程序">
-            <el-option :label="appInfo.appName" :value="appInfo.id" v-for="appInfo in appList"
-                       :key="appInfo.id"></el-option>
-          </el-select>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="unShowAndClear(1,'addAppForm')">取 消</el-button>
         <el-button type="primary" @click="saveApp('addAppForm')">确 定</el-button>
       </div>
     </el-dialog>
+
     <!--修改弹框-->
     <el-dialog title="修改应用" :visible.sync="updataDialogFormVisible">
       <!--form表单-->
@@ -191,7 +187,7 @@
           <el-input v-model="updateAppFormData.appName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="应用类型" prop="type">
-          <el-select v-model="updateAppFormData.type" placeholder="请选择应用类型">
+          <el-select v-model="updateAppFormData.type" placeholder="请选择应用类型" :disabled="true">
             <el-option label="小程序" :value="1"></el-option>
             <el-option label="H5" :value="2"></el-option>
           </el-select>
@@ -216,7 +212,7 @@
         </div>
 
         <el-form-item label="应用显示类型" prop="showType">
-          <el-select v-model="updateAppFormData.showType" placeholder="请选择显示类型">
+          <el-select v-model="updateAppFormData.showType" placeholder="请选择显示类型" :disabled="true">
             <el-option label="资讯" :value="1"></el-option>
             <el-option label="壁纸" :value="2"></el-option>
             <el-option label="游戏" :value="3"></el-option>

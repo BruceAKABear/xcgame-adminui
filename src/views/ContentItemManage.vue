@@ -15,6 +15,7 @@
       </div>
     </div>
     <el-table
+      :header-cell-style="{background:'#eef1f6',color:'#606266'}"
       size="small"
       :data="contentPageData.records"
       height="600"
