@@ -27,18 +27,13 @@
             :value="game.id">
           </el-option>
         </el-select>
-        <!--应用选择-->
-        <el-select v-model="pageParam.orderFrom" clearable placeholder="订单来源" size="small"
-                   style="width: 180px;margin-left: 10px">
-          <el-option :value="1 " label="小程序"></el-option>
-          <el-option :value="2" label="H5"></el-option>
-        </el-select>
         <el-button size="small" type="primary" @click=" doPageQuery" style="margin-left: 10px">查询
         </el-button>
       </div>
     </div>
     <!--表格-->
     <el-table
+      :header-cell-style="{background:'#eef1f6',color:'#606266'}"
       size="small"
       :data="orderPageData.records"
       height="550"
@@ -71,15 +66,6 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="订单来源">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.orderFrom===1?'success':'warning'">
-            {{ scope.row.orderFrom === 1 ? '小程序' : 'H5' }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
         label="订单状态">
         <template slot-scope="scope">
           <el-tag :type="scope.row.orderState===2?'success':scope.row.orderState===1?'warning':'danger'">
@@ -92,7 +78,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="支付回调状态">
+        label="游戏方回调状态">
         <template slot-scope="scope">
           <el-tag :type="scope.row.orderState===2?'success':scope.row.orderState===1?'warning':'danger'">
             <i

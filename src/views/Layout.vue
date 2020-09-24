@@ -85,6 +85,10 @@
             <i class="el-icon-user-solid"></i>
             <span slot="title">员工管理</span>
           </el-menu-item>
+          <el-menu-item index="systemManage" @click="savePath('systemManage')">
+            <i class="el-icon-s-home"></i>
+            <span slot="title">基础设置</span>
+          </el-menu-item>
         </el-submenu>
       </el-menu>
     </el-aside>

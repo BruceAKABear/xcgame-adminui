@@ -46,6 +46,7 @@
 
     <!--表格-->
     <el-table
+      :header-cell-style="{background:'#eef1f6',color:'#606266'}"
       :data="dataPageData.records"
       height="600"
       border
@@ -61,16 +62,19 @@
       <!--当日用户-->
       <el-table-column label="当日用户" align="center">
         <el-table-column
+          align="center"
           prop="id"
           label="用户数"
         >
         </el-table-column>
         <el-table-column
+          align="center"
           prop="id"
           label="创角用户数"
         >
         </el-table-column>
         <el-table-column
+          align="center"
           prop="id"
           label="创角10级数"
         >
@@ -79,16 +83,19 @@
       <!--总用户-->
       <el-table-column label="总用户" align="center">
         <el-table-column
+          align="center"
           prop="id"
           label="用户数"
         >
         </el-table-column>
         <el-table-column
+          align="center"
           prop="id"
           label="创角用户数"
         >
         </el-table-column>
         <el-table-column
+          align="center"
           prop="id"
           label="创角10级数"
         >
@@ -97,16 +104,19 @@
       <!--留存率-->
       <el-table-column label="创角留存率" align="center">
         <el-table-column
+          align="center"
           prop="id"
           label="次日"
         >
         </el-table-column>
         <el-table-column
+          align="center"
           prop="id"
           label="三日"
         >
         </el-table-column>
         <el-table-column
+          align="center"
           prop="id"
           label="七日"
         >
@@ -116,10 +126,12 @@
       <!--充值信息-->
       <el-table-column label="充值(金额单位：元)" align="center">
         <el-table-column
+          align="center"
           prop="id"
           label="新增人数">
         </el-table-column>
         <el-table-column
+          align="center"
           prop="id"
           label="新增金额">
         </el-table-column>
@@ -127,14 +139,17 @@
       <!--ARPU-->
       <el-table-column label="ARPU(金额单位：元)" align="center">
         <el-table-column
+          align="center"
           prop="id"
           label="总充值人数">
         </el-table-column>
         <el-table-column
+          align="center"
           prop="id"
           label="付费率">
         </el-table-column>
         <el-table-column
+          align="center"
           prop="id"
           label="总金额">
         </el-table-column>

@@ -8,6 +8,7 @@
       <el-button size="small" type="primary" @click="dialogFormVisible=true">新增游戏</el-button>
     </div>
     <el-table
+      :header-cell-style="{background:'#eef1f6',color:'#606266'}"
       :data="pageData.records"
       height="550"
       border
@@ -48,13 +49,13 @@
         align="center"
         :show-overflow-tooltip="true"
         prop="gameH5Url"
-        label="游戏H5访问地址">
+        label="游戏入口地址">
       </el-table-column>
       <el-table-column
         align="center"
         :show-overflow-tooltip="true"
         prop="payCallbackUrl"
-        label="游戏支付回调URL">
+        label="支付回调URL">
       </el-table-column>
       <el-table-column
         align="center"
@@ -113,6 +114,25 @@
         </el-form-item>
         <el-form-item label="支付回调URL" prop="payCallbackUrl">
           <el-input v-model="gameFormData.payCallbackUrl" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="游戏描述" prop="payCallbackUrl">
+          <el-input v-model="updateGameFormData.gameDesc" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="游戏头像" prop="payCallbackUrl">
+          <el-upload
+            class="upload-demo"
+            :action="imageUploadUrl"
+            name="file"
+            :limit="1"
+            :headers="uploadHeader"
+            :on-remove="handleRemovePic"
+            :file-list="picList"
+            :on-success="successUpload"
+            list-type="picture"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
+          </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
