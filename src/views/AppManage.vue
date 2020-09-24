@@ -46,9 +46,9 @@
       <el-table-column
         :show-overflow-tooltip="true"
         align="center"
-        label="关联小程序ID">
+        label="H5应用访问地址">
         <template slot-scope="scope">
-          {{ scope.row.miniId ? scope.row.miniId : '-' }}
+          {{ scope.row.type === 1 ? '-' : 'https://mini.xichengame.net/?sourceType=h5&&sourceAppId=' + scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column
