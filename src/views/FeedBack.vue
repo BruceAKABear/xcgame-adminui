@@ -110,19 +110,19 @@
       <el-card shadow="always">
         <div>
           <div>
-            <span style="font-size: 25px;color: #909399">用户消息</span>
-            <el-divider></el-divider>
+            <span style="font-size: 16px;color: #909399">用户消息</span><span style="margin-left: 50px;color: #909399">用户ID：{{ rowData.userOpenId }}</span><span style="margin-left: 50px;color: #909399">提交时间：{{ rowData.createTime }}</span>
           </div>
-          <div style="margin-top: 30px;font-size: 16px;color: #909399">
-            <div>
-              <span>用户ID:{{ rowData.userOpenId }}</span>
+            <el-divider></el-divider>
+          <div style="margin-top: 20px;font-size: 14px;color: #909399">
+          <!--  <div>
+              <span>用户ID：{{ rowData.userOpenId }}</span>
             </div>
             <div style="margin-top: 10px">
-              <span>提交时间:{{ rowData.createTime }}</span>
-            </div>
-            <div style="margin-top: 10px;font-size: 18px">
-              内容:
-              <span style="margin-left: 5px" v-if="rowData.msgType==='text'">{{ rowData.content }}</span>
+              <span>提交时间：{{ rowData.createTime }}</span>
+            </div> -->
+            <div style="margin-top: 10px;font-size: 16px">
+              消息内容：
+              <span style="margin-left: 25px" v-if="rowData.msgType==='text'">{{ rowData.content }}</span>
               <el-image v-if="rowData.msgType==='image'" :src="rowData.picUrl"></el-image>
             </div>
           </div>
@@ -131,15 +131,15 @@
       <el-card shadow="always" style="margin-top: 40px" v-if="rowData.answered">
         <div>
           <div>
-            <span style="font-size: 25px;color: #909399">回复消息</span>
-            <el-divider></el-divider>
+            <span style="font-size: 16px;color: #909399">回复消息</span><span  style="margin-left: 50px;color: #909399">提交时间：{{ rowData.replyTime }}</span>
           </div>
-          <div style="margin-top: 30px;font-size: 16px;color: #909399">
-            <div style="margin-top: 10px">
-              <span>提交时间:{{ rowData.replyTime }}</span>
-            </div>
-            <div style="margin-top: 10px;font-size: 18px">
-              内容:<span style="margin-left: 5px">{{ rowData.replyContent }}</span>
+            <el-divider></el-divider>
+          <div style="margin-top: 20px;font-size: 14px;color: #909399">
+            <!-- <div style="margin-top: 10px">
+              <span>提交时间：{{ rowData.replyTime }}</span>
+            </div> -->
+            <div style="margin-top: 10px;font-size: 16px">
+              回复内容：<span style="margin-left: 25px">{{ rowData.replyContent }}</span>
             </div>
           </div>
         </div>
@@ -152,7 +152,6 @@
         </div>
       </div>
     </el-dialog>
-
   </div>
 
 </template>
