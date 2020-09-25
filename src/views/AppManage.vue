@@ -212,7 +212,7 @@
         </div>
 
         <el-form-item label="应用显示类型" prop="showType">
-          <el-select v-model="updateAppFormData.showType" placeholder="请选择显示类型" :disabled="true">
+          <el-select v-model="updateAppFormData.showType" placeholder="请选择显示类型" :disabled="updateAppFormData.type===2">
             <el-option label="资讯" :value="1"></el-option>
             <el-option label="壁纸" :value="2"></el-option>
             <el-option label="游戏" :value="3"></el-option>
