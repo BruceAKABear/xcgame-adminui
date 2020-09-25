@@ -65,6 +65,7 @@
         align="center">
         <template slot-scope="scope">
           <el-button
+            type="warning"
             size="mini"
             @click="handleEdit(scope.row)">修改
           </el-button>
@@ -112,21 +113,22 @@
       <!--form表单-->
       <el-form label-position="right" label-width="120px" :model="updateEmployeeFormData" :rules="rules"
                ref="updateEmployeeForm">
-        <el-form-item label="用户昵称">
+        <el-form-item label="用户昵称" prop="userName">
           <el-input v-model="updateEmployeeFormData.userName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="手机号">
+        <el-form-item label="手机号" prop="phoneNumber">
           <el-input v-model="updateEmployeeFormData.phoneNumber" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="启停状态">
           <el-switch
+            :disabled="updateEmployeeFormData.isAdmin"
             v-model="updateEmployeeFormData.enable"
             active-text="启用"
             inactive-text="停用">
           </el-switch>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="updateEmployeeFormData.passWord" autocomplete="off"></el-input>
+          <el-input placeholder="如果不设置就是用原始密码" v-model="updateEmployeeFormData.passWord" autocomplete="off" ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

@@ -6,55 +6,74 @@
     </el-breadcrumb>
     <!--支付配置-->
     <el-tabs type="border-card" border style="margin-top: 25px; width: 100%;">
-      <el-tab-pane label="充值">
-        <el-form label-position="right" label-width="120px" :model="addFromDataPay" ref="addFromDataPayFrom" :rules="rules">
-          <el-form-item label="标题" prop="title">
-            <el-input autocomplete="off" v-model="addFromDataPay.title"></el-input>
-          </el-form-item>
-          <el-form-item label="描述" prop="title">
-            <el-input autocomplete="off" v-model="addFromDataPay.descrip"></el-input>
-          </el-form-item>
-          <el-form-item label="图片">
-            <el-upload
-              class="upload-demo"
-              :action="imageUploadUrl"
-              name="file"
-              :limit="1"
-              :headers="uploadHeader"
-              :on-remove="handleRemovePic"
-              :file-list="picList"
-              :on-success="successUpload"
-              list-type="picture"
-              :before-upload="beforeUpload"
-            >
-              <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
-            </el-upload>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitFormPay('addFromDataPayFrom')">提 交</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-card class="box-card" body-style="padding:5px" style="width:230px;height: 105px;">
+      <el-tab-pane label="支付客服消息模板">
+        <div class="changable-box">
+          <el-switch
+            v-model="payShangeStatus"
+            active-text="修改"
+            inactive-text="不修改">
+          </el-switch>
+        </div>
+        <div class="pane-box">
+          <div class="form-box">
+            <el-form label-position="right" label-width="80px" :model="addFromDataPay" ref="addFromDataPayFrom"
+                     :rules="rules">
+              <el-form-item label="标题" prop="title">
+                <el-input autocomplete="off" v-model="addFromDataPay.title"></el-input>
+              </el-form-item>
+              <el-form-item label="描述" prop="title">
+                <el-input autocomplete="off" v-model="addFromDataPay.descrip"></el-input>
+              </el-form-item>
+              <el-form-item label="图片">
+                <el-upload
+                  class="upload-demo"
+                  :action="imageUploadUrl"
+                  name="file"
+                  :limit="1"
+                  :headers="uploadHeader"
+                  :on-remove="handleRemovePic"
+                  :file-list="picList"
+                  :on-success="successUpload"
+                  list-type="picture"
+                  :before-upload="beforeUpload"
+                >
+                  <el-button size="small" type="primary">上传图片</el-button>
+                  <div slot="tip" class="el-upload__tip">只能图片文件，图片大小必须在1MB以内</div>
+                </el-upload>
+              </el-form-item>
+              <el-form-item v-if="payShangeStatus">
+                <el-button type="primary" @click="submitFormPay('addFromDataPayFrom')">提 交</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="sample-box">
+            <div class="smaple-header">
+              <span>支付客服消息预览</span>
+            </div>
+            <el-card class="box-card" body-style="padding:5px" style="width:260px;height: 105px;">
               <div class="count-item">
                 <div class="count-item-content">
-                  <span style="height: 25px;line-height: 20px;">{{addFromDataPay.title}}</span>
-                  <span style="height: 70px;font-size: 12px;color: gray;line-height: 25px;">{{addFromDataPay.descrip}}</span>
+                  <span style="height: 25px;line-height: 20px;">{{ addFromDataPay.title }}</span>
+                  <span
+                    style="height: 50px;font-size: 12px;color: gray;line-height: 25px;">{{
+                      addFromDataPay.descrip
+                    }}</span>
                 </div>
                 <div class="img-box">
                   <el-image
-                    src="https://img11.360buyimg.com/n7/jfs/t1/94448/29/2734/524808/5dd4cc16E990dfb6b/59c256f85a8c3757.jpg"
+                    :src="addFromDataPay.picUrl"
                     fit="cover"
                     style="width: 80px; height: 80px"></el-image>
                 </div>
               </div>
             </el-card>
-          </el-form-item>
-        </el-form>
+          </div>
+        </div>
       </el-tab-pane>
       <!--关注配置-->
       <el-tab-pane label="关注">
-        <el-form label-position="right" label-width="120px" ref="addFromDataFollow"  :model="addFromDataFollow" :rules="rules">
+        <el-form label-position="right" label-width="80px" ref="addFromDataFollow" :model="addFromDataFollow"
+                 :rules="rules">
           <el-form-item label="标题" prop="title">
             <el-input autocomplete="off" v-model="addFromDataFollow.title"></el-input>
           </el-form-item>
@@ -81,12 +100,15 @@
           <el-form-item>
             <el-button type="primary" @click="submitFormFollow('addFromDataFollow')">提 交</el-button>
           </el-form-item>
-           <el-form-item>
+          <el-form-item>
             <el-card class="box-card" body-style="padding:5px" style="width:230px;height: 105px;">
               <div class="count-item">
                 <div class="count-item-content">
-                  <span style="height: 25px;line-height: 20px;">{{addFromDataFollow.title}}</span>
-                  <span style="height: 70px;font-size: 12px;color: gray;line-height: 25px;">{{addFromDataFollow.descrip}}</span>
+                  <span style="height: 25px;line-height: 20px;">{{ addFromDataFollow.title }}</span>
+                  <span
+                    style="height: 70px;font-size: 12px;color: gray;line-height: 25px;">{{
+                      addFromDataFollow.descrip
+                    }}</span>
                 </div>
                 <div class="img-box">
                   <el-image
@@ -141,23 +163,23 @@ export default {
       uploadHeader: {
         token: '321'
       },
-      imageUploadUrl: 'http://192.168.101.19:8222/image/upload'
+      imageUploadUrl: 'http://192.168.101.19:8222/image/upload',
+      payShangeStatus: false
     }
   },
   methods: {
     // 支付新增
     submitFormPay (formName) {
-      console.log('-------')
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // 新增请求 [0].url
+          // 新增请求
           this.addFromDataPay.picUrl = this.picList[0].url
           addOrUpdatePay(this.addFromDataPay).then(res => {
             this.$message.success('新增成功')
             // 清空
             this.$refs[formName].resetFields()
             this.picList = []
-            this.doQueryItemList()
+            this.doQueryPay()
           })
         } else {
           console.log('error submit!!')
@@ -167,7 +189,6 @@ export default {
     },
     // 关注新增
     submitFormFollow (formName) {
-      console.log('-------')
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 新增请求 [0].url
@@ -177,7 +198,6 @@ export default {
             // 清空
             this.$refs[formName].resetFields()
             this.picList = []
-            // this.doQueryItemList()
           })
         } else {
           console.log('error submit!!')
@@ -188,8 +208,8 @@ export default {
     // 支付查询
     doQueryPay () {
       getPrePayResponse({}).then(res => {
-        console.log('查询支付：', res.data)
-        this.payList = res.data
+        this.addFromDataPay = res.data
+        this.picList = [{ url: res.data.picUrl }]
       })
     },
     // 关注查询
@@ -228,6 +248,8 @@ export default {
 
 <style lang="scss" scoped>
 .count-item {
+  margin-left: 15px;
+  margin-right: 15px;
   display: flex;
   align-items: center;
 
@@ -251,4 +273,33 @@ export default {
     height: 100px;
   }
 }
+
+.changable-box {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+
+}
+
+.pane-box {
+  display: flex;
+
+  .form-box {
+    width: 60%;
+    padding: 30px;
+  }
+
+  .sample-box {
+    width: 40%;
+    padding: 30px;
+
+    .smaple-header {
+      font-size: 18px;
+      font-weight: bold;
+      color: #c8c9cc;
+      margin-bottom: 15px;
+    }
+  }
+}
+
 </style>
