@@ -116,7 +116,7 @@
           <el-input v-model="gameFormData.payCallbackUrl" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="游戏描述" prop="payCallbackUrl">
-          <el-input v-model="updateGameFormData.gameDesc" autocomplete="off"></el-input>
+          <el-input v-model="gameFormData.gameDesc" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="游戏头像" prop="payCallbackUrl">
           <el-upload
@@ -129,9 +129,10 @@
             :file-list="picList"
             :on-success="successUpload"
             list-type="picture"
+            :before-upload="beforeUpload"
           >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
+            <el-button size="small" type="primary">上传图片</el-button>
+            <div slot="tip" class="el-upload__tip">一次只能上传一张照片图片，图片大小不能超过1MB</div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -141,7 +142,7 @@
       </div>
     </el-dialog>
     <!--修改弹框-->
-    <el-dialog title="新增游戏" :visible.sync="updataDialogFormVisible">
+    <el-dialog title="新增游戏" :visible.sync="updataDialogFormVisible" @close="unShowAndClear(2,'addGameForm')">
       <!--form表单-->
       <el-form label-position="right" label-width="120px" :model="updateGameFormData" :rules="rules"
                ref="updateGameForm">
@@ -177,6 +178,7 @@
             :file-list="picList"
             :on-success="successUpload"
             list-type="picture"
+            :before-upload="beforeUpload"
           >
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
@@ -193,6 +195,7 @@
 
 <script>
 import { page, addOrUpdate, deleteById } from '@/api/Game'
+import { getToken } from '@/utils/TokenUtil'
 
 export default {
   name: 'GameManage',
@@ -236,10 +239,36 @@ export default {
             trigger: 'blur'
           }
         ]
-      }
+      },
+      imageUploadUrl: 'http://127.0.0.1:8222/image/upload',
+      uploadHeader: {
+        token: '123'
+      },
+      picList: []
     }
   },
   methods: {
+    handleRemovePic (file, fileList) {
+      this.picList = fileList
+    },
+    setToken () {
+      this.uploadHeader.token = getToken()
+    },
+    successUpload (response, file, fileList) {
+      this.picList.push({ url: response.data })
+    },
+    beforeUpload (file) {
+      console.log('文件信息', file)
+      const isPic = file.type === 'image/jpeg' || file.type === 'image/gif' || file.type === 'image/png'
+      const isLt1M = file.size / 1024 / 1024 < 1
+      if (!isPic) {
+        this.$message.error('只能上传图片')
+      }
+      if (!isLt1M) {
+        this.$message.error('图片大小必须在1MB以内')
+      }
+      return isPic && isLt1M
+    },
     doPageQuery () {
       page(this.pageQueryParam).then(res => {
         this.pageData = res.data
@@ -250,6 +279,7 @@ export default {
       // addGameForm
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.gameFormData.headPic = this.picList[0].url
           // 新增请求
           addOrUpdate(this.gameFormData).then(res => {
             this.$message.success('新增成功')
@@ -257,6 +287,7 @@ export default {
             this.$refs[formName].resetFields()
             // 隐藏
             this.dialogFormVisible = false
+            this.picList = []
             // 再次请求列表
             this.doPageQuery()
           })
@@ -275,12 +306,14 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // 新增请求
+            this.updateGameFormData.headPic = this.picList[0].url
             addOrUpdate(this.updateGameFormData).then(res => {
               this.$message.success('修改成功')
               // 清空
               this.$refs[formName].resetFields()
               // 隐藏
               this.updataDialogFormVisible = false
+              this.picList = []
               // 再次请求列表
               this.doPageQuery()
             })
@@ -294,8 +327,10 @@ export default {
     handleEdit (row) {
       this.updateGameFormData = row
       this.updataDialogFormVisible = true
+      this.picList = [{ url: row.headPic }]
     },
     unShowAndClear (type, fromId) {
+      this.picList = []
       if (type === 1) {
         this.dialogFormVisible = false
         this.$refs[fromId].resetFields()
@@ -325,6 +360,7 @@ export default {
   },
   created () {
     this.doPageQuery()
+    this.setToken()
   }
 }
 </script>

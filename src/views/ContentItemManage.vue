@@ -109,6 +109,7 @@
             :file-list="picList"
             :on-success="successUpload"
             list-type="picture"
+            :before-upload="beforeUpload"
           >
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传一个图片，同时只能上传jpg/png文件，且不超过10MB</div>
@@ -152,6 +153,7 @@
             :file-list="picList"
             :on-success="successUpload"
             list-type="picture"
+            :before-upload="beforeUpload"
           >
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
@@ -369,6 +371,18 @@ export default {
     },
     successUpload (response, file, fileList) {
       this.picList.push({ url: response.data })
+    },
+    beforeUpload (file) {
+      console.log('文件信息', file)
+      const isPic = file.type === 'image/jpeg' || file.type === 'image/gif' || file.type === 'image/png'
+      const isLt1M = file.size / 1024 / 1024 < 1
+      if (!isPic) {
+        this.$message.error('只能上传图片')
+      }
+      if (!isLt1M) {
+        this.$message.error('图片大小必须在1MB以内')
+      }
+      return isPic && isLt1M
     },
     pageNumberChange (res) {
       this.pageParam.pageNumber = res

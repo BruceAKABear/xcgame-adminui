@@ -100,7 +100,7 @@
         align="center">
         <template slot-scope="scope">
           <el-button :disabled="scope.row.type===1" size="mini" type="primary"
-                     v-clipboard:copy="'https://mini.xichengame.net/?sourceType=h5&&sourceAppId=' + scope.row.id "
+                     v-clipboard:copy="'https://gameshell.xichengame.net/?sourceType=h5&&sourceAppId=' + scope.row.id "
                      v-clipboard:success="copySuccess" v-clipboard:error="copyError"
           >复制访问地址
           </el-button>
