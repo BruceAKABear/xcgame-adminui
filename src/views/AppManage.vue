@@ -95,11 +95,17 @@
       >
       </el-table-column>
       <el-table-column
-        width="180"
+        width="260"
         label="操作"
         align="center">
         <template slot-scope="scope">
+          <el-button :disabled="scope.row.type===1" size="mini" type="primary"
+                     v-clipboard:copy="'https://mini.xichengame.net/?sourceType=h5&&sourceAppId=' + scope.row.id "
+                     v-clipboard:success="copySuccess" v-clipboard:error="copyError"
+          >复制访问地址
+          </el-button>
           <el-button
+            type="warning"
             size="mini"
             @click="handleEdit(scope.row)">修改
           </el-button>
@@ -465,6 +471,12 @@ export default {
     pageNumberChange (res) {
       this.pageParam.pageNumber = res
       this.doPageQuery()
+    },
+    copySuccess () {
+      this.$message.success('访问地址复制成功')
+    },
+    copyError () {
+      this.$message.error('访问地址复制失败')
     }
   },
   created () {
