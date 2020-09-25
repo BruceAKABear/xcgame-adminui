@@ -185,7 +185,8 @@ export default {
   name: 'ContentItemManage',
   data () {
     return {
-      imageUploadUrl: 'http://127.0.0.1:8222/image/upload',
+      // imageUploadUrl: 'http://127.0.0.1:8222/image/upload',
+      imageUploadUrl: 'http://192.168.101.19:8222/image/upload',
       addFormData: {},
       updateFormData: {},
       pageParam: {
